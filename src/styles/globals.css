@@ -1,0 +1,322 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+.poppins {
+  font-family: "Poppins", sans-serif;
+}
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+
+    --accent: 210 40% 96.1%;
+    --accent-foreground: ;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --ring: 215 20.2% 65.1%;
+
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: ;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 85.7% 97.3%;
+
+    --ring: 217.2 32.6% 17.5%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    /* @apply bg-background text-foreground; */
+  }
+}
+
+body {
+  max-width: 100vw;
+  max-height: 100vh;
+}
+
+.ant-modal-content {
+  border-radius: 0px !important;
+}
+.code {
+  background-color: #6161611a;
+  border-radius: 0.25em;
+  color: #616161;
+  font-size: 0.9rem;
+  padding: 0.25em;
+  font-weight: 400;
+}
+
+* {
+  -webkit-font-smoothing: antialiased;
+}
+a,
+div {
+  outline: none;
+}
+ul {
+  list-style-type: disc;
+  padding-left: 20px;
+}
+li > p {
+  margin: 10px 0px !important;
+}
+ol {
+  list-style-type: decimal;
+  padding-left: 20px;
+}
+li > ul {
+  list-style-type: circle !important;
+  padding-left: 30px;
+}
+.edit-menu > div {
+  @apply space-x-3;
+  @apply px-2;
+}
+
+.edit-menu > div:is(:first-child) {
+  @apply border-r;
+}
+.edit-menu > div:not(:last-child):not(:first-child) {
+  @apply border-r;
+}
+
+p,
+.inter {
+  font-family:
+    "__Inter_0ec1f4",
+    "__Inter_Fallback_0ec1f4",
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    "Helvetica Neue",
+    Arial,
+    "Noto Sans",
+    sans-serif,
+    "Apple Color Emoji",
+    "Segoe UI Emoji",
+    "Segoe UI Symbol",
+    "Noto Color Emoji";
+}
+
+.blogArticle > *:not(img) {
+  max-width: 736px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.blogArticle img {
+  width: 100%;
+  margin: auto;
+}
+.ant-btn-primary:not([disabled]) {
+  background: #1677ff !important;
+}
+
+.button {
+  display: block;
+  display: flex;
+  justify-items: center;
+  width: 100%;
+  cursor: auto;
+}
+.button > a {
+  color: white;
+  padding: 7px 20px;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 17px;
+  font-family: "Inter", sans-serif;
+}
+
+.ProseMirror button.ProseMirror-selectednode {
+  @apply border-2;
+  padding: 5px 0px;
+  @apply border-neutral-200;
+}
+.ProseMirror pre {
+  background: #0d0d0d;
+  color: #fff;
+  font-family: "JetBrainsMono", monospace;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+}
+.ProseMirror pre code {
+  color: inherit;
+  padding: 0;
+  background: none;
+  font-size: 0.8rem;
+}
+
+.ProseMirror p.is-editor-empty:first-child::before {
+  color: #adb5bd;
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
+.ProseMirror > * {
+  margin-bottom: 1rem;
+}
+.ProseMirror p {
+  font-size: 18px;
+  line-height: 1.8rem;
+  color: #404040;
+}
+.ProseMirror blockquote {
+  border-left: 3px solid rgba(13, 13, 13, 0.1);
+  padding-left: 1rem;
+}
+.ProseMirror strong {
+  color: black;
+}
+
+.ProseMirror h1,
+.ProseMirror h2,
+.ProseMirror h3 {
+  font-weight: 500;
+  margin-bottom: 0.5rem !important;
+}
+.ProseMirror h1 {
+  font-size: 32px;
+}
+.ProseMirror h2 {
+  font-size: 28px;
+}
+.ProseMirror h3 {
+  font-size: 24px;
+}
+.ProseMirror .link {
+  text-decoration: underline !important;
+}
+
+.hljs-comment,
+.hljs-quote {
+  color: #616161;
+}
+
+.hljs-variable,
+.hljs-template-variable,
+.hljs-attribute,
+.hljs-tag,
+.hljs-name,
+.hljs-regexp,
+.hljs-link,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class {
+  color: #f98181;
+}
+
+.hljs-number,
+.hljs-meta,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params {
+  color: #fbbc88;
+}
+
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet {
+  color: #b9f18d;
+}
+
+.hljs-title,
+.hljs-section {
+  color: #faf594;
+}
+
+.hljs-keyword,
+.hljs-selector-tag {
+  color: #70cff8;
+}
+
+.hljs-emphasis {
+  font-style: italic;
+}
+
+.hljs-strong {
+  font-weight: 700;
+}
+
+.cm-editor {
+  min-height: 100%;
+  height: 100%;
+}
+.editor-wrapper,
+.editor-layout {
+  height: 100% !important;
+}
+
+@keyframes slider {
+  from {
+    /* transform: translateY(200px); */
+    transform: scale(0.95);
+  }
+  to {
+    transform: translateY(0px);
+    transform: scale(1);
+  }
+}
+.slide-in {
+  animation: slider 150ms ease-in;
+}

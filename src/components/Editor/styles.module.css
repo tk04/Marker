@@ -1,0 +1,8 @@
+.ProseMirror > *:not(.node-image) {
+  max-width: 736px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.node-image {
+  width: 100%;
+}

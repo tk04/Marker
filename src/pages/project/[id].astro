@@ -1,0 +1,14 @@
+---
+// export const prerender=false;
+// export function getStaticPaths(){return []}
+import Layout from "@/layouts/Layout.astro"
+import App from "@/components/Dir/App.tsx"
+import '@/styles/globals.css'
+
+const {id} = Astro.params
+---
+
+<Layout>
+  
+<App client:only id={id}/>
+</Layout>

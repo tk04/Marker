@@ -1,4 +1,4 @@
-import { readDir, BaseDirectory, type FileEntry } from "@tauri-apps/api/fs";
+import { readDir, type FileEntry } from "@tauri-apps/api/fs";
 import parseMd from "@/utils/parseMd";
 
 import { invoke } from "@tauri-apps/api";
@@ -11,30 +11,38 @@ import { IoIosArrowBack } from "react-icons/io";
 export interface FileData extends FileEntry {
   metadata: { [key: string]: any };
 }
+interface Project {
+  dir: string;
+  name: string;
+}
 interface props {
   id: number;
 }
 const App: React.FC<props> = ({ id }) => {
   const [files, setFiles] = useState<FileData[]>([]);
+  const [project, setProject] = useState<Project>();
   const [currFile, setCurrFile] = useState<FileData | null>(null);
   async function getDir() {
     const proj = await store.get("apps");
     if (!proj) return;
     //@ts-ignore
     const app = proj[id];
+    setProject(app);
 
     const entries = await readDir(app.dir, {
-      dir: BaseDirectory.AppData,
       recursive: true,
     });
+
     async function processEntries(entries: FileEntry[], arr: any[]) {
       for (const entry of entries) {
         if (entry.children) {
-          let arr: any[] = [];
-          processEntries(entry.children, arr);
-          arr.push({ ...entry, children: arr });
+          let subArr: any[] = [];
+          processEntries(entry.children, subArr);
+          arr.push({ ...entry, children: subArr });
         } else {
-          if (!entry.name?.endsWith(".md")) return;
+          if (!entry.name?.endsWith(".md") || entry.name.startsWith(".")) {
+            continue;
+          }
           const metadata: string | null =
             (await invoke("get_file_metadata", {
               filePath: entry.path,
@@ -74,7 +82,13 @@ const App: React.FC<props> = ({ id }) => {
         </div>
       </div>
       <div className="w-full h-full ml-[200px]">
-        {currFile && <Editor file={currFile} key={currFile.path} />}
+        {currFile && (
+          <Editor
+            file={currFile}
+            key={currFile.path}
+            projectPath={project?.dir || ""}
+          />
+        )}
       </div>
     </div>
   );

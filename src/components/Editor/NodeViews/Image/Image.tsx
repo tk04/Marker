@@ -1,6 +1,5 @@
 import { NodeViewWrapper } from "@tiptap/react";
 import { BiDotsVerticalRounded } from "react-icons/bi";
-import { IoResizeOutline } from "react-icons/io5";
 import { useEffect, useRef, useState } from "react";
 import {
   Popover,
@@ -9,28 +8,24 @@ import {
 } from "@/components/ui/popover";
 import Options from "./Options";
 import type props from "../types";
-import { toast } from "@/components/ui/use-toast";
+import getImgUrl from "@/utils/getImgUrl";
 
-const ImageView: React.FC<props> = ({
-  node,
-  selected,
-  updateAttributes,
-  deleteNode,
-}) => {
+const ImageView: React.FC<props> = ({ node, selected, updateAttributes }) => {
   const ref = useRef<HTMLDivElement>(null);
   const [open, setOpen] = useState(false);
-  const [uploadImage, setUploadImage] = useState(false);
+  async function updateImgSrc() {
+    const src = await getImgUrl(node.attrs.folderPath, node.attrs.src);
+    updateAttributes({ imgPath: node.attrs.src });
+    updateAttributes({ src });
+  }
   useEffect(() => {
-    if (node && node.attrs?.src?.startsWith("blob:") && !node.attrs?.noUpload) {
-      setUploadImage(true);
+    if (
+      !node?.attrs?.src?.startsWith("asset://") &&
+      !node?.attrs?.src?.startsWith("http")
+    ) {
+      updateImgSrc();
     }
-  }, [node.attrs]);
-  useEffect(() => {
-    if (uploadImage && node.attrs.src?.startsWith("blob:")) {
-      const uploadImg = async () => { };
-      uploadImg();
-    }
-  }, [uploadImage]);
+  }, []);
 
   const handleCircleDrag = (event: any) => {
     let rects = ref.current!.getBoundingClientRect();
@@ -78,39 +73,21 @@ const ImageView: React.FC<props> = ({
           1040,
         )}px] ${selected && "outline outline-[3px] outline-[#7bf]"}`}
       >
-        <img
-          src={node.attrs.src}
-          width={Math.min(node.attrs.width, 1040)}
-          height={node.attrs.height}
-          style={{ borderRadius: node.attrs.rounded + "px" }}
-        />
+        <img src={node.attrs.src} />
         {selected && (
-          <div>
-            <div
-              className="absolute -bottom-4 -right-4 cursor-nwse-resize h-8 w-8 rounded-full bg-[#7bf]"
-              onMouseDown={() => {
-                window.addEventListener("mousemove", handleCircleDrag);
-                window.addEventListener("mouseup", mouseUpHandler);
-              }}
-            >
-              <div className="flex justify-center items-center h-full w-full">
-                <IoResizeOutline className="-scale-x-100 text-white" />
-              </div>
-            </div>
-            <Popover open={open} onOpenChange={(val) => setOpen(val)}>
-              <PopoverTrigger className="absolute -top-2 -right-2 text-white rounded-full p-1 z-10 bg-[#7bf]">
-                <BiDotsVerticalRounded size={20} />
-              </PopoverTrigger>
-              <PopoverContent>
-                <Options
-                  alt={node.attrs.alt}
-                  updateAlt={updateAlt}
-                  closeModal={() => setOpen(false)}
-                  updateAttributes={updateAttributes}
-                />
-              </PopoverContent>
-            </Popover>
-          </div>
+          <Popover open={open} onOpenChange={(val) => setOpen(val)}>
+            <PopoverTrigger className="absolute -top-2 -right-2 text-white rounded-full p-1 z-10 bg-[#7bf]">
+              <BiDotsVerticalRounded size={20} />
+            </PopoverTrigger>
+            <PopoverContent>
+              <Options
+                alt={node.attrs.alt}
+                updateAlt={updateAlt}
+                closeModal={() => setOpen(false)}
+                updateAttributes={updateAttributes}
+              />
+            </PopoverContent>
+          </Popover>
         )}
       </div>
     </NodeViewWrapper>

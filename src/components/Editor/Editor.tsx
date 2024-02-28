@@ -22,12 +22,24 @@ service.addRule("paragraph", {
     return "\n" + content + "\n";
   },
 });
+marked.Renderer.prototype.paragraph = (text) => {
+  if (text.startsWith("<img")) {
+    return text + "\n";
+  }
+  return "<p>" + text + "</p>";
+};
 interface props {
   filePath: string;
   content: string;
   fileMetadata: { [key: string]: any };
+  projectPath: string;
 }
-const Editor: React.FC<props> = ({ filePath, content, fileMetadata }) => {
+const Editor: React.FC<props> = ({
+  projectPath,
+  filePath,
+  content,
+  fileMetadata,
+}) => {
   const [metadata, setMetadata] = useState(fileMetadata);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState(false);
@@ -35,6 +47,7 @@ const Editor: React.FC<props> = ({ filePath, content, fileMetadata }) => {
   const editor = useTextEditor({
     content,
     onUpdate,
+    folderPath: projectPath,
   });
 
   function onUpdate() {
@@ -63,15 +76,11 @@ const Editor: React.FC<props> = ({ filePath, content, fileMetadata }) => {
   if (!editor) return;
   return (
     <div>
+      <Menu editor={editor} />
       <LinkPopover editor={editor} />
       <div className="h-full flex flex-col m-auto pt-2 w-full">
         <div className="pl-5 flex items-center justify-between p-2 px-5 bg-white relative z-20">
           <div className="flex items-center gap-5">
-            {/* <IoIosArrowBack */}
-            {/*   size={20} */}
-            {/*   className="p-2 w-9 h-9 border rounded-full cursor-pointer" */}
-            {/* /> */}
-
             <div className="flex items-center gap-2">
               <div
                 className={`w-2 h-2 ${error
@@ -86,11 +95,6 @@ const Editor: React.FC<props> = ({ filePath, content, fileMetadata }) => {
                 {error ? "An error occurred" : saving ? "saving..." : "saved"}
               </p>
             </div>
-          </div>
-        </div>
-        <div className="border-y p-0 relative z-20">
-          <div className="max-w-[736px] m-auto">
-            <Menu editor={editor} />
           </div>
         </div>
 
@@ -115,7 +119,13 @@ const Editor: React.FC<props> = ({ filePath, content, fileMetadata }) => {
   );
 };
 
-const MainEditor = ({ file }: { file: FileData }) => {
+const MainEditor = ({
+  file,
+  projectPath,
+}: {
+  file: FileData;
+  projectPath: string;
+}) => {
   const [content, setContent] = useState<null | string>(null);
   async function getContent() {
     let data = await readTextFile(file.path);
@@ -132,6 +142,7 @@ const MainEditor = ({ file }: { file: FileData }) => {
   if (content == null) return;
   return (
     <Editor
+      projectPath={projectPath}
       filePath={file.path}
       content={content}
       fileMetadata={file.metadata}

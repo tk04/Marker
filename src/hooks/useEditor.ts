@@ -1,4 +1,5 @@
 import styles from "@/components/Editor/styles.module.css";
+import BubbleMenu from "@tiptap/extension-bubble-menu";
 
 import { useEditor, ReactNodeViewRenderer } from "@tiptap/react";
 import Image from "@tiptap/extension-image";
@@ -6,20 +7,20 @@ import BulletList from "@tiptap/extension-bullet-list";
 import ListItem from "@tiptap/extension-list-item";
 import OrderedList from "@tiptap/extension-ordered-list";
 import StarterKit from "@tiptap/starter-kit";
-import Link from "@tiptap/extension-link";
 import Video from "@/components/Editor/extensions/Video";
-import ButtonExt from "@/components/Editor/extensions/Button";
 import Code from "@tiptap/extension-code";
 import Placeholder from "@tiptap/extension-placeholder";
 
 import ImageView from "@/components/Editor/NodeViews/Image/Image";
 import CodeBlockLowlight from "@/components/Editor/extensions/CodeBlockLowlight";
+import { RichTextLink } from "@/components/Editor/extensions/link-text";
 
 interface props {
   content: string;
   onUpdate?: () => void;
+  folderPath: string;
 }
-const useTextEditor = ({ content, onUpdate }: props) => {
+const useTextEditor = ({ content, onUpdate, folderPath }: props) => {
   const editor = useEditor({
     editorProps: {
       attributes: {
@@ -27,6 +28,9 @@ const useTextEditor = ({ content, onUpdate }: props) => {
       },
     },
     extensions: [
+      BubbleMenu.configure({
+        element: document.querySelector(".menu") as HTMLElement,
+      }),
       Image.extend({
         addNodeView() {
           return ReactNodeViewRenderer(ImageView, {
@@ -36,54 +40,31 @@ const useTextEditor = ({ content, onUpdate }: props) => {
         addAttributes() {
           return {
             ...this.parent?.(),
-            blogId: {
-              default: "",
+            folderPath: {
+              default: folderPath,
             },
-            articleId: {
-              default: "",
-            },
-            width: {
-              default: "auto",
-            },
-            height: {
-              default: "auto",
-            },
-            rounded: {
-              default: "0",
-
-              parseHTML: (element) => element.getAttribute("data-rounded"),
-              renderhtml: (attributes: any) => {
-                return {
-                  "data-rounded": attributes.rounded,
-                  style: `border-radius: ${attributes.rounded}px`,
-                };
+            imgPath: {
+              default: null,
+              parseHTML: (element) => {
+                return element.getAttribute("src");
               },
             },
           };
         },
         renderHTML({ HTMLAttributes }) {
-          let { rounded, ...props } = HTMLAttributes;
+          let { imgPath, ...props } = HTMLAttributes;
           return [
-            "div",
+            "img",
             {
-              class: "image-container",
-              style: "display: flex; justify-content: center; margin-top: 0px;",
+              ...props,
+              src: imgPath,
             },
-            [
-              "img",
-              {
-                ...props,
-                style: `border-radius: ${rounded}px; max-width: min(96vw, 1024px); margin: 42px auto;`,
-                "data-rounded": rounded,
-              },
-            ],
           ];
         },
       }),
       OrderedList,
       BulletList,
       ListItem,
-      ButtonExt,
       Video.extend({
         addAttributes() {
           return {
@@ -114,7 +95,7 @@ const useTextEditor = ({ content, onUpdate }: props) => {
         },
       }),
 
-      Link.configure({
+      RichTextLink.configure({
         openOnClick: false,
         HTMLAttributes: {
           class: "link",

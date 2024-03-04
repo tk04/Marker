@@ -26,6 +26,17 @@
       "fs": {
         "all": true,
         "scope": ["$HOME/**/*", "$APPDATA/**/*"]
+      },
+      "window": {
+        "all": false,
+        "close": true,
+        "hide": true,
+        "show": true,
+        "maximize": true,
+        "minimize": true,
+        "unmaximize": true,
+        "unminimize": true,
+        "startDragging": true
       }
     },
     "bundle": {
@@ -72,8 +83,13 @@
         "fullscreen": false,
         "height": 600,
         "resizable": true,
+        "center": true,
         "title": "Blog CMS",
-        "width": 800
+        "hiddenTitle": true,
+        "titleBarStyle": "Transparent",
+        "width": 800,
+        "minWidth": 800,
+        "minHeight": 400
       }
     ]
   }

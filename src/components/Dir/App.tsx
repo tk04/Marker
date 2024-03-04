@@ -1,16 +1,13 @@
 import { readDir, type FileEntry } from "@tauri-apps/api/fs";
-import parseMd from "@/utils/parseMd";
-
-import { invoke } from "@tauri-apps/api";
 import store from "@/utils/appStore";
 
 import { useEffect, useState } from "react";
 import Editor from "../Editor/Editor";
-import { IoIosArrowBack } from "react-icons/io";
+import { MdKeyboardDoubleArrowLeft } from "react-icons/md";
+import { HiOutlineHome } from "react-icons/hi2";
+import Dir from "./Dir";
+import File from "./File";
 
-export interface FileData extends FileEntry {
-  metadata: { [key: string]: any };
-}
 interface Project {
   dir: string;
   name: string;
@@ -19,9 +16,10 @@ interface props {
   id: number;
 }
 const App: React.FC<props> = ({ id }) => {
-  const [files, setFiles] = useState<FileData[]>([]);
+  const [files, setFiles] = useState<FileEntry[]>([]);
   const [project, setProject] = useState<Project>();
-  const [currFile, setCurrFile] = useState<FileData | null>(null);
+  const [collapse, setCollapse] = useState(false);
+  const [currFile, setCurrFile] = useState<FileEntry>();
   async function getDir() {
     const proj = await store.get("apps");
     if (!proj) return;
@@ -43,11 +41,7 @@ const App: React.FC<props> = ({ id }) => {
           if (!entry.name?.endsWith(".md") || entry.name.startsWith(".")) {
             continue;
           }
-          const metadata: string | null =
-            (await invoke("get_file_metadata", {
-              filePath: entry.path,
-            })) || null;
-          arr.push({ ...entry, metadata: parseMd(metadata) });
+          arr.push(entry);
         }
       }
     }
@@ -61,32 +55,56 @@ const App: React.FC<props> = ({ id }) => {
 
   return (
     <div className="flex h-full">
-      <div className="max-w-[200px] w-full border-r px-5 h-screen fixed">
-        <a href="/" className="flex items-center gap-1 mt-3 text-sm">
-          <IoIosArrowBack />
-          <p>back</p>
-        </a>
-        <h1 className="text-xl mb-2 mt-5">Files</h1>
-        <hr className="-ml-5 -mr-5 xmb-2" />
-        <div className="xspace-y-2">
-          {files.map((file) => (
+      <div>
+        <div className={`max-w-[210px] w-full px-3 mt-3 fixed pb-5 z-10`}>
+          <div
+            className={`flex px-2 gap-3 transition-all ease-in-out duration-50 w-full ${collapse ? "justify-start" : "justify-between"
+              } items-center mt-1 pb-2`}
+          >
+            <a href="/" className={`cursor-pointer h-fit text-neutral-500`}>
+              <HiOutlineHome size={18} />
+            </a>
             <div
-              className={`flex items-center gap-2 cursor-pointer -mx-5 hover:bg-neutral-100  px-5 py-2 ${currFile?.path == file.path && "bg-neutral-200/80"
+              className={`cursor-pointer h-fit text-neutral-500 ${collapse && "rotate-180"
                 }`}
-              onClick={() => setCurrFile(file)}
-              key={file.path}
+              onClick={() => setCollapse((p) => !p)}
             >
-              <h1 className="text-md">{file.name}</h1>
+              <MdKeyboardDoubleArrowLeft size={20} />
             </div>
-          ))}
+          </div>
+        </div>
+        <div
+          className={`transition-all ease-in-out duration-50 max-w-[210px] w-full border-r pt-10 px-5 xh-screen fixed bg-neutral-100/80  h-full ${collapse ? "-left-[210px]" : "left-0"
+            }`}
+        >
+          <h1 className="text-xl mb-2 mt-5">Files</h1>
+          <hr className="-ml-5 -mr-5 xmb-2" />
+          <div className="text-gray-700">
+            {files.map((file) =>
+              file.children ? (
+                <Dir
+                  currFile={currFile}
+                  setCurrFile={setCurrFile}
+                  file={file}
+                />
+              ) : (
+                <File
+                  currFile={currFile}
+                  setCurrFile={setCurrFile}
+                  file={file}
+                />
+              ),
+            )}
+          </div>
         </div>
       </div>
-      <div className="w-full h-full ml-[200px]">
+      <div className="w-full h-full">
         {currFile && (
           <Editor
             file={currFile}
             key={currFile.path}
             projectPath={project?.dir || ""}
+            collapse={collapse}
           />
         )}
       </div>

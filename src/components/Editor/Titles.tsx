@@ -25,7 +25,7 @@ const Titles: React.FC<props> = ({ metadata, setMetadata, onUpdate }) => {
     }
   }, [metadata]);
   return (
-    <div className="mt-2 mb-5 px-2 md:px-0 max-w-[736px] m-auto">
+    <div className="mt-2 mb-5 px-2 md:px-0">
       <textarea
         ref={titleRef}
         className="outline-none text-5xl font-semibold resize-none mt-10 w-full block"

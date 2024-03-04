@@ -1,4 +1,5 @@
 import styles from "@/components/Editor/styles.module.css";
+import CharacterCount from "@tiptap/extension-character-count";
 import BubbleMenu from "@tiptap/extension-bubble-menu";
 
 import { useEditor, ReactNodeViewRenderer } from "@tiptap/react";
@@ -61,7 +62,39 @@ const useTextEditor = ({ content, onUpdate, folderPath }: props) => {
             },
           ];
         },
+        addInputRules() {
+          return [
+            {
+              find: /(?:^|\s)(!\[(.+|:?)]\((\S+)(?:(?:\s+)["'](\S+)["'])?\))$/,
+              type: this.type,
+              handler({ state, range, match }) {
+                const { tr } = state;
+                const { $from } = state.selection;
+                const start = range.from;
+                let end = range.to;
+
+                const isEmptyLine =
+                  $from.parent.textContent.trim() === match[0].slice(0, -1);
+                if (isEmptyLine) {
+                  //@ts-ignore
+                  const node = this.type.create({
+                    src: match[3],
+                    alt: match[2],
+                    title: match[4],
+                  });
+                  tr.insert(start - 1, node).delete(
+                    tr.mapping.map(start),
+                    tr.mapping.map(end),
+                  );
+                }
+
+                tr.scrollIntoView();
+              },
+            },
+          ];
+        },
       }),
+      CharacterCount,
       OrderedList,
       BulletList,
       ListItem,

@@ -33,12 +33,15 @@ const App: React.FC<props> = ({ id }) => {
 
     async function processEntries(entries: FileEntry[], arr: any[]) {
       for (const entry of entries) {
+        if (entry.name?.startsWith(".")) {
+          continue;
+        }
         if (entry.children) {
           let subArr: any[] = [];
           processEntries(entry.children, subArr);
           arr.push({ ...entry, children: subArr });
         } else {
-          if (!entry.name?.endsWith(".md") || entry.name.startsWith(".")) {
+          if (!entry.name?.endsWith(".md")) {
             continue;
           }
           arr.push(entry);

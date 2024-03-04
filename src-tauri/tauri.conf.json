@@ -17,23 +17,9 @@
         "execute": true,
         "scope": [
           {
-            "name": "cd-command",
-            "cmd": "cd",
-            "args": true
-          },
-          {
-            "name": "ls-command",
-            "cmd": "ls",
-            "args": true
-          },
-          {
-            "name": "git-push",
-            "cmd": "git push"
-          },
-          {
-            "name": "git-commit",
+            "name": "git",
             "cmd": "git",
-            "args": ["commit", "-m", { "validator": "\\S+" }]
+            "args": true
           }
         ]
       },

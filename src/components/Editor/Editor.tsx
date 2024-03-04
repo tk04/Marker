@@ -33,9 +33,11 @@ interface props {
   fileMetadata: { [key: string]: any };
   projectPath: string;
   collapse: boolean;
+  reRender: () => void;
 }
 const Editor: React.FC<props> = ({
   projectPath,
+  reRender,
   file,
   content,
   fileMetadata,
@@ -109,7 +111,11 @@ const Editor: React.FC<props> = ({
           </div>
         </div>
         <div>
-          <Publish projectPath={projectPath} filePath={file.path} />
+          <Publish
+            projectPath={projectPath}
+            filePath={file.path}
+            reRender={reRender}
+          />
         </div>
       </div>
 
@@ -146,6 +152,7 @@ const MainEditor = ({
   const [metadata, setMetadata] = useState<{ [key: string]: any }>({});
 
   async function getContent() {
+    setContent(null);
     let data = await readTextFile(file.path);
     const linesIdx = data.indexOf("---", 2);
     if (data.startsWith("---") && linesIdx != -1) {
@@ -164,6 +171,7 @@ const MainEditor = ({
   return (
     <Editor
       projectPath={projectPath}
+      reRender={async () => await getContent()}
       file={file}
       content={content}
       fileMetadata={metadata}

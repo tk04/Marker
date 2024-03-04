@@ -19,6 +19,8 @@ import { useEffect, useRef, useState } from "react";
 import { join } from "@tauri-apps/api/path";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
+import { useToast } from "../ui/use-toast";
+import { IoCheckmarkSharp } from "react-icons/io5";
 
 interface props {
   projectPath: string;
@@ -26,8 +28,8 @@ interface props {
   reRender: () => void;
 }
 const Publish: React.FC<props> = ({ filePath, projectPath, reRender }) => {
+  const { toast } = useToast();
   const mdRef = useRef<HTMLElement>(null);
-  const [update, setUpdate] = useState(0);
   const commitMsgRef = useRef<HTMLInputElement>(null);
   const [error, setError] = useState<string>();
   const [content, setContent] = useState<string>();
@@ -75,6 +77,12 @@ const Publish: React.FC<props> = ({ filePath, projectPath, reRender }) => {
     }
     //re-render to show changes in updated markdown content
     reRender();
+
+    toast({
+      title: "Pushed changes successfully",
+      variant: "successfull",
+      action: <IoCheckmarkSharp className="mr-5" />,
+    });
   }
   async function getContent() {
     let data = await readTextFile(filePath);
@@ -98,21 +106,18 @@ const Publish: React.FC<props> = ({ filePath, projectPath, reRender }) => {
       }
     };
   }, [open, content]);
-  useEffect(() => {
-    let timeout = setTimeout(() => {
-      if (!mdRef.current) return;
-      mdRef.current.removeAttribute("data-highlighted");
-      hljs.highlightElement(mdRef.current);
-    }, 3000);
-    return () => {
-      clearTimeout(timeout);
-    };
-  }, [update]);
+  function highlightMarkdown() {
+    if (!mdRef.current) return;
+    mdRef.current.removeAttribute("data-highlighted");
+    hljs.highlightElement(mdRef.current);
+  }
 
   return (
     <div>
       <Dialog open={open} onOpenChange={(e) => setOpen(e)}>
-        <DialogTrigger className="">Publish</DialogTrigger>
+        <DialogTrigger className="text-sm text-neutral-700">
+          Publish
+        </DialogTrigger>
         <DialogContent className="sm:rounded-sm max-w-[700px]">
           <DialogHeader>
             <DialogTitle>Commit Changes</DialogTitle>
@@ -122,17 +127,14 @@ const Publish: React.FC<props> = ({ filePath, projectPath, reRender }) => {
             </DialogDescription>
           </DialogHeader>
 
-          <div className="mb-5">
+          <div className="mb-5 max-w-full">
             <h2 className="text-lg font-medium">Raw Markdown</h2>
-            <pre className="max-h-[400px] overflow-auto">
+            <pre className="max-h-[400px] max-w-[650px] whitespace-pre-wrap overflow-auto">
               <code
                 ref={mdRef}
                 className="language-md"
                 contentEditable
-                onInput={(e) => {
-                  e.preventDefault();
-                  setUpdate((p) => p + 1);
-                }}
+                onBlur={highlightMarkdown}
               >
                 {content}
               </code>

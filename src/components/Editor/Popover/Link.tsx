@@ -87,28 +87,10 @@ const LinkPopover: React.FC<props> = ({ editor }) => {
               Edit
             </PopoverTrigger>
             <PopoverContent>
-              <div>
-                <label className="block text-sm ">Text</label>
-                <input
-                  defaultValue={text}
-                  onChange={(e) => setText(e.target.value)}
-                  className="w-full text-[15px] border rounded-md px-2  focus:outline-none py-1"
-                />
-              </div>
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
 
-              <div className="w-56 py-1 xspace-y-1 space-y-5">
-                <div>
-                  <label className="block text-sm ">Link</label>
-                  <input
-                    defaultValue={link}
-                    onChange={(e) => setLink(e.target.value)}
-                    className="w-full text-[15px] border rounded-md px-2  focus:outline-none py-1"
-                  />
-                </div>
-              </div>
-              <button
-                className="bg-primary text-secondary rounded-md py-1 font-semibold  text-[13px] px-2 w-full hover:bg-neutral-600 "
-                onClick={() => {
                   if (link === null) {
                     return;
                   }
@@ -134,8 +116,32 @@ const LinkPopover: React.FC<props> = ({ editor }) => {
                   setOpen(false);
                 }}
               >
-                Save
-              </button>
+                <div>
+                  <label className="block text-sm ">Text</label>
+                  <input
+                    defaultValue={text}
+                    onChange={(e) => setText(e.target.value)}
+                    className="w-full text-[15px] border rounded-md px-2  focus:outline-none py-1"
+                  />
+                </div>
+
+                <div className="w-56 py-1 xspace-y-1 space-y-5">
+                  <div>
+                    <label className="block text-sm ">Link</label>
+                    <input
+                      defaultValue={link}
+                      onChange={(e) => setLink(e.target.value)}
+                      className="w-full text-[15px] border rounded-md px-2  focus:outline-none py-1"
+                    />
+                  </div>
+                </div>
+                <button
+                  className="bg-primary text-secondary rounded-md py-1 font-semibold  text-[13px] px-2 w-full hover:bg-neutral-600 "
+                  type="submit"
+                >
+                  Save
+                </button>
+              </form>
             </PopoverContent>
           </Popover>
           <button

@@ -10,7 +10,15 @@ const Options: React.FC<props> = ({ alt, updateAlt, closeModal }) => {
   let inputRef = useRef<HTMLInputElement>(null);
   return (
     <div className="text-sm">
-      <div className="w-56 py-1 xspace-y-1 space-y-5">
+      <form
+        className="w-56 py-1 xspace-y-1 space-y-5"
+        onSubmit={(e) => {
+          e.preventDefault();
+
+          updateAlt(inputRef.current?.value || alt);
+          closeModal();
+        }}
+      >
         <div>
           <label className="block text-sm ">Alt text</label>
           <input
@@ -21,14 +29,11 @@ const Options: React.FC<props> = ({ alt, updateAlt, closeModal }) => {
         </div>
         <button
           className="bg-primary text-secondary rounded-md py-1 font-semibold  text-[13px] px-2 w-full hover:bg-neutral-600 "
-          onClick={() => {
-            updateAlt(inputRef.current?.value || alt);
-            closeModal();
-          }}
+          type="submit"
         >
           Save
         </button>
-      </div>
+      </form>
     </div>
   );
 };

@@ -14,7 +14,9 @@ const File: React.FC<props> = ({ file, setCurrFile, currFile }) => {
       onClick={() => setCurrFile(file)}
       key={file.path}
     >
-      <p className="text-sm">{file.name}</p>
+      <p className="text-sm block whitespace-nowrap w-full overflow-hidden text-ellipsis">
+        {file.name}
+      </p>
     </div>
   );
 };

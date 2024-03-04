@@ -59,7 +59,7 @@ const App: React.FC<props> = ({ id }) => {
   return (
     <div className="flex h-full">
       <div>
-        <div className={`max-w-[210px] w-full px-3 mt-3 fixed pb-5 z-10`}>
+        <div className={`max-w-[210px] w-full px-3 mt-[15px] fixed pb-5 z-10`}>
           <div
             className={`flex px-2 gap-3 transition-all ease-in-out duration-50 w-full ${collapse ? "justify-start" : "justify-between"
               } items-center mt-1 pb-2`}
@@ -77,11 +77,11 @@ const App: React.FC<props> = ({ id }) => {
           </div>
         </div>
         <div
-          className={`transition-all ease-in-out duration-50 max-w-[210px] overflow-x-hidden w-full border-r pt-10 px-5 xh-screen fixed bg-neutral-100/80  h-full ${collapse ? "-left-[210px]" : "left-0"
+          className={`transition-all ease-in-out duration-50 max-w-[210px] xoverflow-x-hidden w-full border-r pt-10 px-5 xh-screen fixed bg-neutral-100/80  h-full ${collapse ? "-left-[210px]" : "left-0"
             }`}
         >
           <h1 className="text-xl mb-2 mt-5">Files</h1>
-          <hr className="-ml-5 -mr-5 xmb-2" />
+          <hr className="-ml-5 -mr-5" />
           <div className="text-gray-700">
             {files.map((file) =>
               file.children ? (

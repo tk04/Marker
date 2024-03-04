@@ -74,7 +74,7 @@ const App: React.FC<props> = ({ id }) => {
           </div>
         </div>
         <div
-          className={`transition-all ease-in-out duration-50 max-w-[210px] w-full border-r pt-10 px-5 xh-screen fixed bg-neutral-100/80  h-full ${collapse ? "-left-[210px]" : "left-0"
+          className={`transition-all ease-in-out duration-50 max-w-[210px] overflow-x-hidden w-full border-r pt-10 px-5 xh-screen fixed bg-neutral-100/80  h-full ${collapse ? "-left-[210px]" : "left-0"
             }`}
         >
           <h1 className="text-xl mb-2 mt-5">Files</h1>

@@ -110,6 +110,9 @@ dependencies:
   he:
     specifier: ^1.2.0
     version: 1.2.0
+  highlight.js:
+    specifier: ^11.9.0
+    version: 11.9.0
   lowlight:
     specifier: ^3.1.0
     version: 3.1.0

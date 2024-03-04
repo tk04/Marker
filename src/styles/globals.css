@@ -229,7 +229,10 @@ p,
 
 .ProseMirror h1,
 .ProseMirror h2,
-.ProseMirror h3 {
+.ProseMirror h3,
+.ProseMirror h4,
+.ProseMirror h5,
+.ProseMirror h6 {
   font-weight: 500;
   margin-bottom: 0.5rem !important;
 }
@@ -241,6 +244,13 @@ p,
 }
 .ProseMirror h3 {
   font-size: 24px;
+}
+
+.ProseMirror h4 {
+  font-size: 22px;
+}
+.ProseMirror h5 {
+  font-size: 20px;
 }
 .ProseMirror .link {
   text-decoration: underline !important;

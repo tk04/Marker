@@ -14,6 +14,7 @@ import Menu from "./Menu";
 import LinkPopover from "./Popover/Link";
 import useTextEditor from "@/hooks/useEditor.ts";
 import TurndownService from "turndown";
+import Publish from "./Publish";
 
 const service = new TurndownService({
   headingStyle: "atx",
@@ -106,6 +107,9 @@ const Editor: React.FC<props> = ({
               {error ? "An error occurred" : saving ? "saving..." : "saved"}
             </p>
           </div>
+        </div>
+        <div>
+          <Publish projectPath={projectPath} filePath={file.path} />
         </div>
       </div>
 

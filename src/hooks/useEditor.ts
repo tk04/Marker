@@ -124,7 +124,7 @@ const useTextEditor = ({ content, onUpdate, folderPath }: props) => {
         codeBlock: false,
         code: false,
         heading: {
-          levels: [1, 2, 3],
+          levels: [1, 2, 3, 4, 5, 6],
         },
       }),
 

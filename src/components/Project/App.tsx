@@ -1,4 +1,10 @@
-import { readDir, type FileEntry } from "@tauri-apps/api/fs";
+import {
+  readDir,
+  type FileEntry,
+  writeTextFile,
+  exists,
+  createDir,
+} from "@tauri-apps/api/fs";
 import store from "@/utils/appStore";
 
 import { useEffect, useState } from "react";
@@ -6,7 +12,7 @@ import Editor from "../Editor/Editor";
 import { MdKeyboardDoubleArrowLeft } from "react-icons/md";
 import { HiOutlineHome } from "react-icons/hi2";
 import Dir from "./Dir";
-import File from "./File";
+import { join } from "@tauri-apps/api/path";
 
 interface Project {
   dir: string;
@@ -20,14 +26,8 @@ const App: React.FC<props> = ({ id }) => {
   const [project, setProject] = useState<Project>();
   const [collapse, setCollapse] = useState(false);
   const [currFile, setCurrFile] = useState<FileEntry>();
-  async function getDir() {
-    const proj = await store.get("apps");
-    if (!proj) return;
-    //@ts-ignore
-    const app = proj[id];
-    setProject(app);
-
-    const entries = await readDir(app.dir, {
+  async function getFiles(path: string) {
+    const entries = await readDir(path, {
       recursive: true,
     });
 
@@ -52,10 +52,30 @@ const App: React.FC<props> = ({ id }) => {
     await processEntries(entries, files);
     setFiles(files);
   }
+  async function getProject() {
+    const proj = await store.get("apps");
+    if (!proj) return;
+    //@ts-ignore
+    const app = proj[id];
+    setProject(app);
+    await getFiles(app.dir);
+  }
   useEffect(() => {
-    getDir();
+    getProject();
   }, []);
 
+  async function addFileHandler(path: string, filename: string) {
+    const newfilePath = await join(path, filename);
+    const folder = await join(newfilePath, "../");
+    if (!(await exists(folder))) {
+      await createDir(folder, { recursive: true });
+    }
+    if (newfilePath.endsWith(".md")) {
+      await writeTextFile(newfilePath, "");
+    }
+    await getFiles(project!.dir);
+  }
+  if (!project) return;
   return (
     <div className="flex h-full">
       <div>
@@ -80,24 +100,14 @@ const App: React.FC<props> = ({ id }) => {
           className={`transition-all ease-in-out duration-50 max-w-[210px] xoverflow-x-hidden w-full border-r pt-10 px-5 xh-screen fixed bg-neutral-100/80  h-full ${collapse ? "-left-[210px]" : "left-0"
             }`}
         >
-          <h1 className="text-xl mb-2 mt-5">Files</h1>
-          <hr className="-ml-5 -mr-5" />
-          <div className="text-gray-700">
-            {files.map((file) =>
-              file.children ? (
-                <Dir
-                  currFile={currFile}
-                  setCurrFile={setCurrFile}
-                  file={file}
-                />
-              ) : (
-                <File
-                  currFile={currFile}
-                  setCurrFile={setCurrFile}
-                  file={file}
-                />
-              ),
-            )}
+          <div className="text-gray-700 -ml-5">
+            <Dir
+              currFile={currFile}
+              addFile={addFileHandler}
+              setCurrFile={setCurrFile}
+              file={{ name: "root", path: project!.dir, children: files }}
+              root={true}
+            />
           </div>
         </div>
       </div>

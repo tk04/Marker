@@ -11,17 +11,17 @@ interface props {
 }
 const Projects: React.FC<props> = ({ apps, deleteHandler }) => {
   return (
-    <div className="mb-10 grid grid-cols-1 lg:grid-cols-2 gap-2">
+    <div className="mb-10 grid grid-cols-1 lg:grid-cols-2 gap-5">
       {Object.entries(apps).map((app) => (
         <div
-          className="flex flex-col border overflow-auto rounded-md h-[140px]"
+          className="flex flex-col border border-neutral-200 overflow-auto rounded-sm h-[140px] group"
           key={app[0]}
         >
-          <a href={`/project/${app[0]}`} className="grow p-5 ">
+          <a href={`/project/${app[0]}`} className="grow p-5 h-full w-full">
             <h1 className="text-xl font-medium">{app[1].name}</h1>
             <p className="text-sm text-gray-500">{app[1].dir}</p>
           </a>
-          <div className="self-end ">
+          <div className="self-end opacity-0 group-hover:opacity-100 transition-all duration-150">
             <Popover>
               <PopoverTrigger className="hover:bg-red-200/30 rounded-md m-2 p-1 hover:text-red-500 cursor-pointer">
                 <TbTrash />

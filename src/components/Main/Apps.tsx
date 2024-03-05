@@ -111,7 +111,9 @@ const Apps = () => {
           </div>
           {error && <p className="text-sm text-red-500">{error}</p>}
 
-          <Button onClick={submitHandler}>Add Project</Button>
+          <Button className="rounded-sm" onClick={submitHandler}>
+            Add Project
+          </Button>
         </DialogContent>
       </Dialog>
     </div>

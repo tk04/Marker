@@ -10,7 +10,7 @@ import store from "@/utils/appStore";
 import { useEffect, useState } from "react";
 import Editor from "../Editor/Editor";
 import { MdKeyboardDoubleArrowLeft } from "react-icons/md";
-import { HiOutlineHome } from "react-icons/hi2";
+import { HiHome } from "react-icons/hi2";
 import Dir from "./Dir";
 import { join } from "@tauri-apps/api/path";
 
@@ -19,7 +19,7 @@ interface Project {
   name: string;
 }
 interface props {
-  id: number;
+  id?: string;
 }
 const App: React.FC<props> = ({ id }) => {
   const [files, setFiles] = useState<FileEntry[]>([]);
@@ -85,7 +85,7 @@ const App: React.FC<props> = ({ id }) => {
               } items-center mt-1 pb-2`}
           >
             <a href="/" className={`cursor-pointer h-fit text-neutral-500`}>
-              <HiOutlineHome size={18} />
+              <HiHome size={18} />
             </a>
             <div
               className={`cursor-pointer h-fit text-neutral-500 ${collapse && "rotate-180"

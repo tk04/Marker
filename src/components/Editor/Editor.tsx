@@ -1,5 +1,3 @@
-import { marked } from "marked";
-
 import yaml from "yaml";
 
 import {
@@ -13,20 +11,9 @@ import { useEffect, useState } from "react";
 import Menu from "./Menu";
 import LinkPopover from "./Popover/Link";
 import useTextEditor from "@/hooks/useEditor.ts";
-import TurndownService from "turndown";
 import Publish from "./Publish";
+import { markdownToHtml, htmlToMarkdown } from "@/utils/markdown";
 
-const service = new TurndownService({
-  headingStyle: "atx",
-  hr: "---",
-  codeBlockStyle: "fenced",
-});
-marked.Renderer.prototype.paragraph = (text) => {
-  if (text.startsWith("<img")) {
-    return text + "\n";
-  }
-  return "<p>" + text + "</p>";
-};
 interface props {
   file: FileEntry;
   content: string;
@@ -58,7 +45,7 @@ const Editor: React.FC<props> = ({
   }
   async function saveFile() {
     let mdContent = "---\n" + yaml.stringify(metadata) + "---\n";
-    mdContent += service.turndown(editor?.getHTML() || "");
+    mdContent += htmlToMarkdown(editor?.getHTML() || "");
     await writeTextFile(file.path, mdContent).catch(() => setError(true));
 
     setSaving(false);
@@ -92,10 +79,7 @@ const Editor: React.FC<props> = ({
           }`}
       >
         <div className="flex items-center gap-5">
-          <div className="flex items-center gap-2">
-            <p className="text-sm text-neutral-400">
-              {file.path.replace(projectPath + "/", "")}
-            </p>
+          <div className="flex items-center gap-2 text-neutral-400 text-sm">
             <div
               className={`w-2 h-2 ${error
                   ? "bg-red-500"
@@ -104,10 +88,12 @@ const Editor: React.FC<props> = ({
                     : "bg-orange-400"
                 } rounded-full`}
             ></div>
-            <p className="text-neutral-400 text-sm inter">
+            <p className="inter">
               Draft -{" "}
               {error ? "An error occurred" : saving ? "saving..." : "saved"}
             </p>
+            <p>/</p>
+            <p>{file.path.replace(projectPath + "/", "")}</p>
           </div>
         </div>
         <div>
@@ -161,7 +147,7 @@ const MainEditor = ({
       setMetadata(parsed);
       data = data.slice(data.indexOf("---", 2) + 4);
     }
-    const parsedHTML = await marked.parse(data);
+    const parsedHTML = await markdownToHtml(data);
     setContent(parsedHTML);
   }
   useEffect(() => {

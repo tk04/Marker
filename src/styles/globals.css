@@ -330,3 +330,17 @@ p,
 .slide-in {
   animation: slider 150ms ease-in;
 }
+::-webkit-scrollbar {
+  height: 5px;
+  width: 5px;
+  @apply bg-neutral-200;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-neutral-400;
+  -webkit-border-radius: 1ex;
+}
+
+::-webkit-scrollbar-corner {
+  @apply bg-neutral-200;
+}

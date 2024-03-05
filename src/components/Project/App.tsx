@@ -79,9 +79,9 @@ const App: React.FC<props> = ({ id }) => {
   return (
     <div className="flex h-full">
       <div>
-        <div className={`max-w-[210px] w-full px-3 mt-[15px] fixed pb-5 z-10`}>
+        <div className={`max-w-[210px] w-full px-3 pt-[15px] fixed pb-5 z-10`}>
           <div
-            className={`flex px-2 gap-3 transition-all ease-in-out duration-50 w-full ${collapse ? "justify-start" : "justify-between"
+            className={`flex px-2 gap-3 w-full ${collapse ? "justify-start" : "justify-between"
               } items-center mt-1 pb-2`}
           >
             <a href="/" className={`cursor-pointer h-fit text-neutral-500`}>
@@ -97,10 +97,10 @@ const App: React.FC<props> = ({ id }) => {
           </div>
         </div>
         <div
-          className={`transition-all ease-in-out duration-50 max-w-[210px] xoverflow-x-hidden w-full border-r pt-10 px-5 xh-screen fixed bg-neutral-100/80  h-full ${collapse ? "-left-[210px]" : "left-0"
+          className={`transition-all ease-in-out duration-50 max-w-[210px] w-full border-r pt-12  fixed bg-neutral-100 flex flex-col h-screen ${collapse ? "-left-[210px]" : "left-0"
             }`}
         >
-          <div className="text-gray-700 -ml-5">
+          <div className="text-gray-700 overflow-y-auto h-full pr-5 overflow-x-hidden w-full">
             <Dir
               currFile={currFile}
               addFile={addFileHandler}

@@ -14,12 +14,10 @@ var imageExtensions = ["jpg", "jpeg", "png", "gif", "bmp", "webp", "heif"];
 const ImageView: React.FC<props> = ({ node, selected, updateAttributes }) => {
   const ref = useRef<HTMLDivElement>(null);
   const [open, setOpen] = useState(false);
-  const [isImg, setIsImage] = useState(false);
+  const [isImg, setIsImage] = useState(true);
   async function updateAssetSrc() {
-    const ext: string = node.attrs.src.split(".").pop();
     const src = await getImgUrl(node.attrs.folderPath, node.attrs.src);
     updateAttributes({ src, imgPath: node.attrs.src });
-    setIsImage(imageExtensions.includes(ext.toLowerCase()));
   }
   useEffect(() => {
     if (
@@ -28,7 +26,10 @@ const ImageView: React.FC<props> = ({ node, selected, updateAttributes }) => {
     ) {
       updateAssetSrc();
     }
-  }, []);
+
+    const ext: string = node.attrs.src.split(".").pop();
+    setIsImage(imageExtensions.includes(ext.toLowerCase()));
+  }, [node.attrs.src]);
 
   const updateAlt = (alt: string) => {
     updateAttributes({

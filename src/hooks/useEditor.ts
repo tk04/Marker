@@ -8,7 +8,6 @@ import BulletList from "@tiptap/extension-bullet-list";
 import ListItem from "@tiptap/extension-list-item";
 import OrderedList from "@tiptap/extension-ordered-list";
 import StarterKit from "@tiptap/starter-kit";
-import Video from "@/components/Editor/extensions/Video";
 import Code from "@tiptap/extension-code";
 import Placeholder from "@tiptap/extension-placeholder";
 
@@ -98,19 +97,6 @@ const useTextEditor = ({ content, onUpdate, folderPath }: props) => {
       OrderedList,
       BulletList,
       ListItem,
-      Video.extend({
-        addAttributes() {
-          return {
-            ...this.parent?.(),
-            blogId: {
-              default: "",
-            },
-            articleId: {
-              default: "",
-            },
-          };
-        },
-      }),
       Code.configure({
         HTMLAttributes: {
           class: "code",

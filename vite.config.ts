@@ -1,10 +1,7 @@
-import { defineConfig } from "astro/config";
-import react from "@astrojs/react";
-import tailwind from "@astrojs/tailwind";
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import path from "path";
 
-import node from "@astrojs/node";
-
-// https://astro.build/config
 export default defineConfig({
   // prevent vite from obscuring rust errors
   clearScreen: false,
@@ -30,14 +27,11 @@ export default defineConfig({
     // produce sourcemaps for debug builds
     sourcemap: !!process.env.TAURI_DEBUG,
   },
-  integrations: [
-    react(),
-    tailwind({
-      applyBaseStyles: false,
-    }),
-  ],
-  output: "server",
-  adapter: node({
-    mode: "standalone",
-  }),
+
+  plugins: [react()],
+  resolve: {
+    alias: {
+      "@": path.resolve(__dirname, "./src"),
+    },
+  },
 });

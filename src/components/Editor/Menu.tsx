@@ -1,10 +1,7 @@
 import type { Editor } from "@tiptap/react";
-import { BubbleMenu, EditorContent } from "@tiptap/react";
+import { BubbleMenu } from "@tiptap/react";
 
 import type { ReactElement } from "react";
-import { MdArrowDropDown } from "react-icons/md";
-import { FiLink } from "react-icons/fi";
-import { BsCameraVideo } from "react-icons/bs";
 import {
   AiOutlineBold,
   AiOutlineItalic,
@@ -13,10 +10,6 @@ import {
 import { HiListBullet } from "react-icons/hi2";
 import { BsListOl } from "react-icons/bs";
 import { HiOutlineCode } from "react-icons/hi";
-import type { MenuProps } from "antd";
-import { Dropdown } from "antd";
-import { getLinkText } from "./hasLink";
-import { IoImageOutline } from "react-icons/io5";
 import { TbBlockquote } from "react-icons/tb";
 import { RxDividerHorizontal } from "react-icons/rx";
 
@@ -31,9 +24,8 @@ const MenuItem = ({
 }) => {
   return (
     <button
-      className={`${
-        isActive && " bg-stone-200/60"
-      } text-[16px] text-stone-400 p-2 rounded-md hover:bg-stone-200/60`}
+      className={`${isActive && " bg-stone-200/60"
+        } text-[16px] text-stone-400 p-2 rounded-md hover:bg-stone-200/60`}
       onClick={onClick}
     >
       {icon}

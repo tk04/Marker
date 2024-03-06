@@ -92,7 +92,7 @@ const Publish: React.FC<props> = ({ filePath, projectPath, reRender }) => {
     if (open) {
       getContent();
     }
-    let timeout: number;
+    let timeout: ReturnType<typeof setTimeout>;
     if (open && content) {
       timeout = setTimeout(() => {
         if (!mdRef.current) return;

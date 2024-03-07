@@ -11,7 +11,7 @@ interface props {
 }
 const Projects: React.FC<props> = ({ apps, deleteHandler }) => {
   return (
-    <div className="mb-10 grid grid-cols-1 lg:grid-cols-2 gap-5">
+    <div className="mb-20 grid grid-cols-1 lg:grid-cols-2 gap-5">
       {Object.entries(apps).map((app) => (
         <div
           className="flex flex-col border border-neutral-200 overflow-auto rounded-sm h-[140px] group"

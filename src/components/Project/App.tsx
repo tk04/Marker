@@ -11,19 +11,18 @@ import { useEffect, useState } from "react";
 import Editor from "../Editor/Editor";
 import { MdKeyboardDoubleArrowLeft } from "react-icons/md";
 import { HiHome } from "react-icons/hi2";
-import Dir from "./Dir";
+import FileTree from "./FileTree";
 import { join } from "@tauri-apps/api/path";
+import { AppsType, Dir } from "@/utils/types";
+import Selector from "./Selector";
 
-interface Project {
-  dir: string;
-  name: string;
-}
 interface props {
   id?: string;
 }
 const App: React.FC<props> = ({ id }) => {
   const [files, setFiles] = useState<FileEntry[]>([]);
-  const [project, setProject] = useState<Project>();
+  const [project, setProject] = useState<Dir>();
+  const [apps, setApps] = useState<AppsType>();
   const [collapse, setCollapse] = useState(false);
   const [currFile, setCurrFile] = useState<FileEntry>();
   async function getFiles(path: string) {
@@ -53,16 +52,19 @@ const App: React.FC<props> = ({ id }) => {
     setFiles(files);
   }
   async function getProject() {
-    const proj = await store.get("apps");
-    if (!proj) return;
+    const projects = await store.get("apps");
+    if (!projects) return;
     //@ts-ignore
-    const app = proj[id];
+    const app = projects[id];
+    setApps(projects);
     setProject(app);
     await getFiles(app.dir);
   }
   useEffect(() => {
+    setCurrFile(undefined);
+
     getProject();
-  }, []);
+  }, [id]);
 
   async function addFileHandler(path: string, filename: string) {
     if (!filename.endsWith(".md")) filename += ".md";
@@ -76,7 +78,7 @@ const App: React.FC<props> = ({ id }) => {
     }
     await getFiles(project!.dir);
   }
-  if (!project) return;
+  if (!project || !apps) return;
   return (
     <div className="flex h-full">
       <div>
@@ -85,7 +87,10 @@ const App: React.FC<props> = ({ id }) => {
             className={`flex px-2 gap-3 w-full ${collapse ? "justify-start" : "justify-between"
               } items-center mt-1 pb-2`}
           >
-            <a href="/" className={`cursor-pointer h-fit text-neutral-500`}>
+            <a
+              href="/?home=true"
+              className={`cursor-pointer h-fit text-neutral-500`}
+            >
               <HiHome size={18} />
             </a>
             <div
@@ -102,7 +107,7 @@ const App: React.FC<props> = ({ id }) => {
             }`}
         >
           <div className="text-gray-700 overflow-y-auto h-full pr-5 overflow-x-hidden w-full">
-            <Dir
+            <FileTree
               currFile={currFile}
               addFile={addFileHandler}
               setCurrFile={setCurrFile}
@@ -110,6 +115,7 @@ const App: React.FC<props> = ({ id }) => {
               root={true}
             />
           </div>
+          <Selector apps={apps} currProject={project} setApps={setApps} />
         </div>
       </div>
       <div className="w-full h-full">

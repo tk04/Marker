@@ -10,7 +10,7 @@ interface props {
   currFile?: FileEntry;
   root?: boolean;
 }
-const Dir: React.FC<props> = ({
+const FileTree: React.FC<props> = ({
   root,
   file,
   setCurrFile,
@@ -59,7 +59,7 @@ const Dir: React.FC<props> = ({
           <div className="pl-5">
             {file.children?.map((file) =>
               file.children ? (
-                <Dir
+                <FileTree
                   currFile={currFile}
                   addFile={addFile}
                   setCurrFile={setCurrFile}
@@ -104,4 +104,4 @@ const Dir: React.FC<props> = ({
     </div>
   );
 };
-export default Dir;
+export default FileTree;

@@ -30,7 +30,7 @@ const Dir: React.FC<props> = ({
         <div className="ml-5">
           <div className="flex group justify-between items-center mt-10 mb-2">
             <h1 className="text-xl">Files</h1>
-            <CreateFile onClick={createHandler} />
+            <CreateFile onClick={createHandler} root={root} />
           </div>
           <hr className="-ml-5 -mr-5" />
         </div>

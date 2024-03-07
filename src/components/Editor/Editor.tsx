@@ -92,7 +92,7 @@ const Editor: React.FC<props> = ({
               Draft -{" "}
               {error ? "An error occurred" : saving ? "saving..." : "saved"}
             </p>
-            <p>/</p>
+            <p>-</p>
             <p>{file.path.replace(projectPath + "/", "")}</p>
           </div>
         </div>

@@ -15,15 +15,26 @@ import { Label } from "../ui/label";
 import { Button } from "../ui/button";
 import type { AppsType } from "@/utils/types";
 import Projects from "./Projects";
+import EmptyProject from "./EmptyProject";
 
 const Apps = () => {
-  const [apps, setApps] = useState<AppsType>({});
+  const [apps, setApps] = useState<AppsType>();
   const [error, setError] = useState<string>();
+  const [empty, setEmpty] = useState(false);
   const [dir, setDir] = useState<string | null>(null);
   const nameRef = useRef<HTMLInputElement>(null);
   useEffect(() => {
-    store.get("apps").then((e) => setApps(e || {}));
+    store.get("apps").then((e) => {
+      setApps(e || {});
+    });
   }, []);
+  useEffect(() => {
+    if (apps && Object.keys(apps).length == 0) {
+      setEmpty(true);
+    } else {
+      setEmpty(false);
+    }
+  }, [apps]);
 
   async function searchForDirectory() {
     try {
@@ -68,9 +79,14 @@ const Apps = () => {
     await store.set("apps", currApps);
     await store.save();
   }
+  if (!apps) return;
   return (
     <div>
-      <Projects apps={apps} deleteHandler={deleteHandler} />
+      {empty ? (
+        <EmptyProject />
+      ) : (
+        <Projects apps={apps} deleteHandler={deleteHandler} />
+      )}
       <Dialog>
         <DialogTrigger className="border border-gray-400 hover:bg-neutral-100 p-2 w-full border-dashed rounded-md float-end mt-auto block">
           Add project

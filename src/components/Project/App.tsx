@@ -65,6 +65,7 @@ const App: React.FC<props> = ({ id }) => {
   }, []);
 
   async function addFileHandler(path: string, filename: string) {
+    if (!filename.endsWith(".md")) filename += ".md";
     const newfilePath = await join(path, filename);
     const folder = await join(newfilePath, "../");
     if (!(await exists(folder))) {

@@ -7,7 +7,6 @@ import { AppsType, Dir } from "@/utils/types";
 import { Dispatch, SetStateAction, useState } from "react";
 import { BsFolder2Open } from "react-icons/bs";
 import { Link } from "react-router-dom";
-import store from "@/utils/appStore";
 import CreateProject from "../Main/AddProject";
 import { MdAdd } from "react-icons/md";
 interface props {
@@ -24,7 +23,7 @@ const Selector: React.FC<props> = ({ apps, currProject, setApps }) => {
         className="w-full border-t px-5 py-3"
       >
         <div className="flex items-center gap-2 text-neutral-700">
-          <BsFolder2Open size={20} />
+          <BsFolder2Open size={18} />
           <h1 className="w-fit">{currProject.name}</h1>
         </div>
         <p className="text-neutral-400 text-[10px] text-ellipsis overflow-hidden">
@@ -38,10 +37,7 @@ const Selector: React.FC<props> = ({ apps, currProject, setApps }) => {
               <Link
                 key={app[0]}
                 to={`/project/${app[0]}`}
-                onClick={async () => {
-                  setOpen(false);
-                  await store.set("currProject", app[0]);
-                }}
+                onClick={() => setOpen(false)}
                 className={`block border-b py-4 px-5 last:border-b-0 hover:bg-neutral-100 hover:cursor-pointer ${app[1].dir == currProject.dir && "bg-neutral-100"
                   }`}
               >

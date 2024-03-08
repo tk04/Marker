@@ -75,7 +75,7 @@ const Editor: React.FC<props> = ({
         {editor.storage.characterCount.words()} words
       </p>
       <div
-        className={`pl-5 pt-4 h-fit flex items-center justify-between px-5 bg-white relative z-20 transition-all duration-50 ${collapse ? "ml-[65px]" : "ml-[210px]"
+        className={`h-fit flex items-center justify-between px-5 bg-white relative z-20 transition-all duration-50 mt-[7px]  ${collapse ? "ml-[140px]" : "ml-[210px]"
           }`}
       >
         <div className="flex items-center gap-5">

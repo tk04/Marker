@@ -15,12 +15,14 @@ import FileTree from "./FileTree";
 import { join } from "@tauri-apps/api/path";
 import { AppsType, Dir } from "@/utils/types";
 import Selector from "./Selector";
+import { Link } from "react-router-dom";
 
 interface props {
   id?: string;
 }
 const App: React.FC<props> = ({ id }) => {
   const [files, setFiles] = useState<FileEntry[]>([]);
+  const [error, setError] = useState<string>();
   const [project, setProject] = useState<Dir>();
   const [apps, setApps] = useState<AppsType>();
   const [collapse, setCollapse] = useState(false);
@@ -56,12 +58,17 @@ const App: React.FC<props> = ({ id }) => {
     if (!projects) return;
     //@ts-ignore
     const app = projects[id];
+    if (!app) {
+      setError("This project does not exists");
+      return;
+    }
     setApps(projects);
     setProject(app);
     await getFiles(app.dir);
   }
   useEffect(() => {
     setCurrFile(undefined);
+    store.set("currProject", id);
 
     getProject();
   }, [id]);
@@ -78,13 +85,25 @@ const App: React.FC<props> = ({ id }) => {
     }
     await getFiles(project!.dir);
   }
+  if (error) {
+    return (
+      <div className="flex flex-col items-center justify-center h-screen">
+        <p className="text-lg font-medium">{error}</p>
+        <Link to="/?home=true" className="underline">
+          go home
+        </Link>
+      </div>
+    );
+  }
   if (!project || !apps) return;
   return (
     <div className="flex h-full">
       <div>
-        <div className={`max-w-[210px] w-full px-3 pt-[15px] fixed pb-5 z-10`}>
+        <div
+          className={`max-w-[210px] w-full px-3 pl-20 pt-[5px] fixed pb-5 z-10`}
+        >
           <div
-            className={`flex px-2 gap-3 w-full ${collapse ? "justify-start" : "justify-between"
+            className={`flex px-2 gap-4 w-full ${collapse ? "justify-start" : "justify-end"
               } items-center mt-1 pb-2`}
           >
             <a

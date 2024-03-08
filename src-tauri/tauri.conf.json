@@ -7,7 +7,7 @@
     "distDir": "../dist"
   },
   "package": {
-    "productName": "blogcms",
+    "productName": "Marker",
     "version": "0.1.0"
   },
   "tauri": {
@@ -47,7 +47,8 @@
         "minimize": true,
         "unmaximize": true,
         "unminimize": true,
-        "startDragging": true
+        "startDragging": true,
+        "setTitle": true
       }
     },
     "bundle": {
@@ -95,8 +96,8 @@
         "height": 600,
         "resizable": true,
         "center": true,
-        "title": "Blog CMS",
-        "hiddenTitle": true,
+        "title": "Marker",
+        "hiddenTitle": false,
         "titleBarStyle": "Transparent",
         "width": 800,
         "minWidth": 800,

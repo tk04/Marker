@@ -40,15 +40,9 @@
       },
       "window": {
         "all": false,
-        "close": true,
-        "hide": true,
-        "show": true,
         "maximize": true,
-        "minimize": true,
         "unmaximize": true,
-        "unminimize": true,
-        "startDragging": true,
-        "setTitle": true
+        "startDragging": true
       }
     },
     "bundle": {
@@ -66,7 +60,7 @@
         "icons/icon.icns",
         "icons/icon.ico"
       ],
-      "identifier": "com.blogkit.dev",
+      "identifier": "com.marker.app",
       "longDescription": "",
       "macOS": {
         "entitlements": null,

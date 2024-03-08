@@ -10,12 +10,12 @@ import store from "@/utils/appStore";
 import { useEffect, useState } from "react";
 import Editor from "../Editor/Editor";
 import { MdKeyboardDoubleArrowLeft } from "react-icons/md";
-import { HiHome } from "react-icons/hi2";
 import FileTree from "./FileTree";
 import { join } from "@tauri-apps/api/path";
 import { AppsType, Dir } from "@/utils/types";
 import Selector from "./Selector";
 import { Link } from "react-router-dom";
+import { BsHouse } from "react-icons/bs";
 
 interface props {
   id?: string;
@@ -103,18 +103,20 @@ const App: React.FC<props> = ({ id }) => {
           className={`max-w-[210px] w-full px-3 pl-20 pt-[5px] fixed pb-5 z-10`}
         >
           <div
-            className={`flex px-2 gap-4 w-full ${collapse ? "justify-start" : "justify-end"
-              } items-center mt-1 pb-2`}
+            className={`flex px-2 gap-3 w-full ${
+              collapse ? "justify-start" : "justify-end"
+            } items-center mt-1 pb-2`}
           >
             <a
               href="/?home=true"
               className={`cursor-pointer h-fit text-neutral-500`}
             >
-              <HiHome size={18} />
+              <BsHouse />
             </a>
             <div
-              className={`cursor-pointer h-fit text-neutral-500 ${collapse && "rotate-180"
-                }`}
+              className={`cursor-pointer h-fit text-neutral-500 ${
+                collapse && "rotate-180"
+              }`}
               onClick={() => setCollapse((p) => !p)}
             >
               <MdKeyboardDoubleArrowLeft size={20} />
@@ -122,8 +124,9 @@ const App: React.FC<props> = ({ id }) => {
           </div>
         </div>
         <div
-          className={`transition-all ease-in-out duration-50 max-w-[210px] w-full border-r pt-12  fixed bg-neutral-100 flex flex-col h-screen ${collapse ? "-left-[210px]" : "left-0"
-            }`}
+          className={`transition-all ease-in-out duration-50 max-w-[210px] w-full border-r pt-12 fixed bg-neutral-100 flex flex-col h-screen ${
+            collapse ? "-left-[210px]" : "left-0"
+          }`}
         >
           <div className="text-gray-700 overflow-y-auto h-full pr-5 overflow-x-hidden w-full">
             <FileTree

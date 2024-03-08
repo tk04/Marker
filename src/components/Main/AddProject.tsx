@@ -15,7 +15,7 @@ import {
 import { AppsType } from "@/utils/types";
 
 const defaultClass =
-  "border border-gray-400 hover:bg-neutral-100 p-2 w-full border-dashed rounded-md float-end mt-auto block";
+  "hover:bg-black/80 p-2 w-full rounded-md bg-black text-white font-medium";
 interface props {
   setApps: Dispatch<SetStateAction<AppsType>>;
   children: ReactNode;

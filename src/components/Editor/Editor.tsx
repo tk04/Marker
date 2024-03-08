@@ -75,18 +75,20 @@ const Editor: React.FC<props> = ({
         {editor.storage.characterCount.words()} words
       </p>
       <div
-        className={`h-fit flex items-center justify-between px-5 bg-white relative z-20 transition-all duration-50 mt-[7px]  ${collapse ? "ml-[140px]" : "ml-[210px]"
-          }`}
+        className={`h-fit pb-2 flex items-center justify-between px-5 z-20 transition-all duration-50 pt-[7px] ${
+          collapse ? "ml-[140px]" : "ml-[210px]"
+        }`}
       >
         <div className="flex items-center gap-5">
           <div className="flex items-center gap-2 text-neutral-400 text-sm">
             <div
-              className={`w-2 h-2 ${error
+              className={`w-2 h-2 ${
+                error
                   ? "bg-red-500"
                   : !saving
-                    ? "bg-green-500"
-                    : "bg-orange-400"
-                } rounded-full`}
+                  ? "bg-green-500"
+                  : "bg-orange-400"
+              } rounded-full`}
             ></div>
             <p className="inter">
               Draft -{" "}
@@ -106,8 +108,9 @@ const Editor: React.FC<props> = ({
       </div>
 
       <div
-        className={`transition-all duration-50 ${collapse ? "ml-0" : "ml-[230px] lg:ml-0"
-          }`}
+        className={`transition-all duration-50 overflow-auto ${
+          collapse ? "ml-0" : "ml-[230px] lg:ml-0"
+        }`}
       >
         <div className="flex flex-col editor pt-20 grow max-w-[580px] lg:max-w-[736px] m-auto w-full">
           <div className="text-editor grow justify-center flex flex-col">

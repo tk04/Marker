@@ -1,2 +1,2 @@
-export type Dir = { name: string; dir: string };
-export type AppsType = { [key: number]: Dir } | {};
+export type Dir = { name: string; dir: string; id: string };
+export type Projects = { [key: string]: Dir };

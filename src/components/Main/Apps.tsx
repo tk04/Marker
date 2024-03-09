@@ -1,45 +1,38 @@
-import store from "@/utils/appStore";
+import { getProjects, deleteProject } from "@/utils/appStore";
 
 import { useEffect, useState } from "react";
-import type { AppsType } from "@/utils/types";
+import type { Projects as ProjectsType } from "@/utils/types";
 import Projects from "./Projects";
 import EmptyProject from "./EmptyProject";
 import AddProject from "./AddProject";
 
 const Apps = () => {
-  const [apps, setApps] = useState<AppsType>();
+  const [projects, setProjects] = useState<ProjectsType>();
   const [empty, setEmpty] = useState(false);
   useEffect(() => {
-    store.get("apps").then((e) => {
-      setApps(e || {});
-    });
+    getProjects().then((e) => setProjects(e));
   }, []);
   useEffect(() => {
-    if (apps && Object.keys(apps).length == 0) {
+    if (projects && Object.keys(projects).length == 0) {
       setEmpty(true);
     } else {
       setEmpty(false);
     }
-  }, [apps]);
+  }, [projects]);
 
   async function deleteHandler(id: string) {
-    const currApps: object = (await store.get("apps")) || {};
-    //@ts-ignore
-    delete currApps[id];
-    setApps(currApps);
-
-    await store.set("apps", currApps);
-    await store.save();
+    const res = await deleteProject(id);
+    setProjects(res);
   }
-  if (!apps) return;
+  if (!projects) return;
   return (
     <div>
       {empty ? (
         <EmptyProject />
       ) : (
-        <Projects apps={apps} deleteHandler={deleteHandler} />
+        <Projects projects={projects} deleteHandler={deleteHandler} />
       )}
-      <AddProject setApps={setApps}>Add Project</AddProject>
+      <AddProject setProjects={setProjects}>Add Project</AddProject>
     </div>
   );
 };

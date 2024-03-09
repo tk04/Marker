@@ -1,7 +1,7 @@
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { Button } from "../ui/button";
-import store from "@/utils/appStore";
+import { createProject } from "@/utils/appStore";
 import { open } from "@tauri-apps/api/dialog";
 import { Dispatch, ReactNode, SetStateAction, useRef, useState } from "react";
 import {
@@ -12,17 +12,17 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { AppsType } from "@/utils/types";
+import { Projects } from "@/utils/types";
 
 const defaultClass =
   "hover:bg-black/80 p-2 w-full rounded-md bg-black text-white font-medium";
 interface props {
-  setApps: Dispatch<SetStateAction<AppsType>>;
+  setProjects: Dispatch<SetStateAction<Projects | undefined>>;
   children: ReactNode;
   className?: string;
 }
 const AddProject: React.FC<props> = ({
-  setApps,
+  setProjects,
   children,
   className = defaultClass,
 }) => {
@@ -49,19 +49,15 @@ const AddProject: React.FC<props> = ({
   }
   const submitHandler = async () => {
     const name = nameRef.current?.value;
-    const currApps: object = (await store.get("apps")) || {};
-    const currId: number = (await store.get("id")) || 0;
     if (!dir || !name) {
       setError("Please make sure to enter both name and directory values");
       return;
     }
-    //@ts-ignore
-    currApps[currId] = { dir, name };
-    setApps(currApps);
-    await store.set("apps", currApps);
-    await store.set("id", currId + 1);
-    await store.save();
-    window.location.assign(`/project/${currId}`);
+
+    const { projects, newProjectId } = await createProject({ dir, name });
+    setProjects(projects);
+
+    window.location.assign(`/project/${newProjectId}`);
   };
   return (
     <Dialog>

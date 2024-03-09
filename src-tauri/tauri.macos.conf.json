@@ -9,6 +9,7 @@
         "title": "Marker",
         "hiddenTitle": false,
         "titleBarStyle": "Overlay",
+        "theme": "Light",
         "width": 800,
         "minWidth": 800,
         "minHeight": 400

@@ -3,23 +3,23 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import type { AppsType } from "@/utils/types";
+import type { Projects } from "@/utils/types";
 import { TbTrash } from "react-icons/tb";
 interface props {
-  apps: AppsType;
+  projects: Projects;
   deleteHandler: (id: string) => void;
 }
-const Projects: React.FC<props> = ({ apps, deleteHandler }) => {
+const Projects: React.FC<props> = ({ projects, deleteHandler }) => {
   return (
     <div className="mb-20 grid grid-cols-1 lg:grid-cols-2 gap-5">
-      {Object.entries(apps).map((app) => (
+      {Object.entries(projects).map((p) => (
         <div
           className="flex flex-col border border-neutral-200 overflow-auto rounded-sm h-[140px] group"
-          key={app[0]}
+          key={p[0]}
         >
-          <a href={`/project/${app[0]}`} className="grow p-5 h-full w-full">
-            <h1 className="text-xl font-medium">{app[1].name}</h1>
-            <p className="text-sm text-gray-500">{app[1].dir}</p>
+          <a href={`/project/${p[0]}`} className="grow p-5 h-full w-full">
+            <h1 className="text-xl font-medium">{p[1].name}</h1>
+            <p className="text-sm text-gray-500">{p[1].dir}</p>
           </a>
           <div className="self-end opacity-0 group-hover:opacity-100 transition-all duration-150">
             <Popover>
@@ -30,7 +30,7 @@ const Projects: React.FC<props> = ({ apps, deleteHandler }) => {
                 <p>Are you sure?</p>
                 <button
                   className="float-right p-1 px-2  bg-red-500 text-white rounded-md hover:bg-red-700"
-                  onClick={deleteHandler.bind(null, app[0])}
+                  onClick={deleteHandler.bind(null, p[0])}
                 >
                   Delete
                 </button>

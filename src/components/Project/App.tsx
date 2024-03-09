@@ -5,26 +5,24 @@ import {
   exists,
   createDir,
 } from "@tauri-apps/api/fs";
-import store from "@/utils/appStore";
+import { getProjects, setCurrProject } from "@/utils/appStore";
 
 import { useEffect, useState } from "react";
 import Editor from "../Editor/Editor";
 import { MdKeyboardDoubleArrowLeft } from "react-icons/md";
 import FileTree from "./FileTree";
 import { join } from "@tauri-apps/api/path";
-import { AppsType, Dir } from "@/utils/types";
+import { Projects, Dir } from "@/utils/types";
 import Selector from "./Selector";
-import { Link } from "react-router-dom";
 import { BsHouse } from "react-icons/bs";
 
 interface props {
-  id?: string;
+  project: Dir;
 }
-const App: React.FC<props> = ({ id }) => {
+const App: React.FC<props> = ({ project }) => {
   const [files, setFiles] = useState<FileEntry[]>([]);
-  const [error, setError] = useState<string>();
-  const [project, setProject] = useState<Dir>();
-  const [apps, setApps] = useState<AppsType>();
+  const [projects, setProjects] = useState<Projects>();
+
   const [collapse, setCollapse] = useState(false);
   const [currFile, setCurrFile] = useState<FileEntry>();
   async function getFiles(path: string) {
@@ -54,24 +52,14 @@ const App: React.FC<props> = ({ id }) => {
     setFiles(files);
   }
   async function getProject() {
-    const projects = await store.get("apps");
-    if (!projects) return;
-    //@ts-ignore
-    const app = projects[id];
-    if (!app) {
-      setError("This project does not exists");
-      return;
-    }
-    setApps(projects);
-    setProject(app);
-    await getFiles(app.dir);
+    await getFiles(project.dir);
+    setProjects(await getProjects());
   }
   useEffect(() => {
     setCurrFile(undefined);
-    store.set("currProject", id);
-
+    setCurrProject(project.id);
     getProject();
-  }, [id]);
+  }, [project]);
 
   async function addFileHandler(path: string, filename: string) {
     if (!filename.endsWith(".md")) filename += ".md";
@@ -85,17 +73,7 @@ const App: React.FC<props> = ({ id }) => {
     }
     await getFiles(project!.dir);
   }
-  if (error) {
-    return (
-      <div className="flex flex-col items-center justify-center h-screen">
-        <p className="text-lg font-medium">{error}</p>
-        <Link to="/?home=true" className="underline">
-          go home
-        </Link>
-      </div>
-    );
-  }
-  if (!project || !apps) return;
+  if (!project || !projects) return;
   return (
     <div className="flex h-full">
       <div>
@@ -103,9 +81,8 @@ const App: React.FC<props> = ({ id }) => {
           className={`max-w-[210px] w-full px-3 pl-20 pt-[5px] fixed pb-5 z-10`}
         >
           <div
-            className={`flex px-2 gap-3 w-full ${
-              collapse ? "justify-start" : "justify-end"
-            } items-center mt-1 pb-2`}
+            className={`flex px-2 gap-3 w-full ${collapse ? "justify-start" : "justify-end"
+              } items-center mt-1 pb-2`}
           >
             <a
               href="/?home=true"
@@ -114,9 +91,8 @@ const App: React.FC<props> = ({ id }) => {
               <BsHouse />
             </a>
             <div
-              className={`cursor-pointer h-fit text-neutral-500 ${
-                collapse && "rotate-180"
-              }`}
+              className={`cursor-pointer h-fit text-neutral-500 ${collapse && "rotate-180"
+                }`}
               onClick={() => setCollapse((p) => !p)}
             >
               <MdKeyboardDoubleArrowLeft size={20} />
@@ -124,9 +100,8 @@ const App: React.FC<props> = ({ id }) => {
           </div>
         </div>
         <div
-          className={`transition-all ease-in-out duration-50 max-w-[210px] w-full border-r pt-12 fixed bg-neutral-100 flex flex-col h-screen ${
-            collapse ? "-left-[210px]" : "left-0"
-          }`}
+          className={`transition-all ease-in-out duration-50 max-w-[210px] w-full border-r pt-12 fixed bg-neutral-100 flex flex-col h-screen ${collapse ? "-left-[210px]" : "left-0"
+            }`}
         >
           <div className="text-gray-700 overflow-y-auto h-full pr-5 overflow-x-hidden w-full">
             <FileTree
@@ -137,7 +112,11 @@ const App: React.FC<props> = ({ id }) => {
               root={true}
             />
           </div>
-          <Selector apps={apps} currProject={project} setApps={setApps} />
+          <Selector
+            projects={projects}
+            currProject={project}
+            setProjects={setProjects}
+          />
         </div>
       </div>
       <div className="w-full h-full">

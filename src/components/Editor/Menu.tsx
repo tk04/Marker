@@ -25,7 +25,7 @@ const MenuItem = ({
   return (
     <button
       className={`${isActive && " bg-stone-200/60"
-        } text-[16px] text-stone-400 p-2 rounded-md hover:bg-stone-200/60`}
+        } text-[14px] font-bold text-stone-500 p-2 hover:bg-stone-200/60`}
       onClick={onClick}
     >
       {icon}
@@ -39,9 +39,9 @@ const Menu: React.FC<props> = ({ editor }) => {
   let menu = editor.chain();
   return (
     <BubbleMenu
-      className={`space-x-2 border p-1 rounded-md text-xs bg-white`}
+      className={`bg-white border p-0 shadow-md rounded-md text-xs`}
       editor={editor}
-      updateDelay={0}
+      updateDelay={200}
       tippyOptions={{ duration: 100 }}
     >
       <MenuItem

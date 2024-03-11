@@ -5,6 +5,7 @@ import {
 } from "@/components/ui/popover";
 import type { Projects } from "@/utils/types";
 import { TbTrash } from "react-icons/tb";
+import { Link } from "react-router-dom";
 interface props {
   projects: Projects;
   deleteHandler: (id: string) => void;
@@ -17,10 +18,10 @@ const Projects: React.FC<props> = ({ projects, deleteHandler }) => {
           className="flex flex-col border border-neutral-200 overflow-auto rounded-sm h-[140px] group"
           key={p[0]}
         >
-          <a href={`/project/${p[0]}`} className="grow p-5 h-full w-full">
+          <Link to={`/project/${p[0]}`} className="grow p-5 h-full w-full">
             <h1 className="text-xl font-medium">{p[1].name}</h1>
             <p className="text-sm text-gray-500">{p[1].dir}</p>
-          </a>
+          </Link>
           <div className="self-end opacity-0 group-hover:opacity-100 transition-all duration-150">
             <Popover>
               <PopoverTrigger className="hover:bg-red-200/30 rounded-md m-2 p-1 hover:text-red-500 cursor-pointer">

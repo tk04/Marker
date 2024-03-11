@@ -76,9 +76,10 @@ const App: React.FC<props> = ({ project }) => {
   if (!project || !projects) return;
   return (
     <div className="flex h-full">
-      <div>
+      <div className="group/menu">
         <div
-          className={`max-w-[210px] w-full px-3 pl-20 pt-[5px] fixed pb-5 z-10`}
+          className={`${!collapse && "opacity-0 group-hover/menu:opacity-100"
+            } max-w-[210px] w-full px-3 pl-20 pt-[5px] fixed pb-5 z-10 transition-all duration-100`}
         >
           <div
             className={`flex px-2 gap-3 w-full ${collapse ? "justify-start" : "justify-end"

@@ -1,4 +1,3 @@
-import styles from "@/components/Editor/styles.module.css";
 import CharacterCount from "@tiptap/extension-character-count";
 import BubbleMenu from "@tiptap/extension-bubble-menu";
 
@@ -24,7 +23,7 @@ const useTextEditor = ({ content, onUpdate, folderPath }: props) => {
   const editor = useEditor({
     editorProps: {
       attributes: {
-        class: `prose h-full ${styles.ProseMirror}`,
+        class: `prose h-full`,
       },
     },
     extensions: [
@@ -33,9 +32,7 @@ const useTextEditor = ({ content, onUpdate, folderPath }: props) => {
       }),
       Image.extend({
         addNodeView() {
-          return ReactNodeViewRenderer(ImageView, {
-            className: `${styles["node-image"]}`,
-          });
+          return ReactNodeViewRenderer(ImageView);
         },
         addAttributes() {
           return {

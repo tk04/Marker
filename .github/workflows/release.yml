@@ -35,10 +35,16 @@ jobs:
           workspaces: "./src-tauri -> target"
 
       - name: Sync node version and setup cache
+        uses: pnpm/action-setup@v3
+        with:
+          version: 8
+      - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
           node-version: "lts/*"
-          cache: "pnpm" # Set this to npm, yarn or pnpm.
+          cache: "pnpm"
+      - name: Install dependencies
+        run: pnpm install
 
       - name: Install frontend dependencies
         # If you don't have `beforeBuildCommand` configured you may want to build your frontend here too.

@@ -1,11 +1,11 @@
 [package]
-name = "app"
-version = "0.1.0"
-description = "A Tauri App"
-authors = ["you"]
+name = "marker"
+version = "1.0.0"
+description = "A Secure Visual Markdown Editor"
+authors = ["tk"]
 license = ""
 repository = ""
-default-run = "app"
+default-run = "marker"
 edition = "2021"
 rust-version = "1.60"
 
@@ -19,6 +19,8 @@ serde_json = "1.0"
 serde = { version = "1.0", features = ["derive"] }
 tauri = { version = "1.6.0", features = [ "updater", "window-unmaximize", "window-maximize", "window-start-dragging", "shell-open", "protocol-asset", "shell-execute", "dialog-all", "fs-all", "path-all"] }
 tauri-plugin-store = { git = "https://github.com/tauri-apps/plugins-workspace", branch = "v1" }
+
+[target.'cfg(target_os = "macos")'.dependencies]
 objc = "0.2.7"
 cocoa = "0.25.0"
 

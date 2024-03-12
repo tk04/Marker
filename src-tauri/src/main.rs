@@ -1,6 +1,5 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
-use objc::{class, msg_send, sel, sel_impl};
 use std::fs::File;
 use std::io::{BufRead, BufReader};
 use tauri::{Manager, Window};
@@ -18,6 +17,7 @@ pub trait WindowExt {
 impl WindowExt for Window {
     fn set_transparent_titlebar(&self) {
         use cocoa::appkit::{NSWindow, NSWindowTitleVisibility};
+        use objc::{class, msg_send, sel, sel_impl};
 
         unsafe {
             let id = self.ns_window().unwrap() as cocoa::base::id;
@@ -78,8 +78,10 @@ fn get_file_metadata(file_path: String) -> Result<String, String> {
 fn main() {
     tauri::Builder::default()
         .setup(|app| {
-            let win = app.get_window("main").unwrap();
-            win.set_transparent_titlebar();
+            if cfg!(target_os = "macos") {
+                let win = app.get_window("main").unwrap();
+                win.set_transparent_titlebar();
+            }
             Ok(())
         })
         .plugin(tauri_plugin_store::Builder::default().build())

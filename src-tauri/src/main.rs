@@ -78,7 +78,8 @@ fn get_file_metadata(file_path: String) -> Result<String, String> {
 fn main() {
     tauri::Builder::default()
         .setup(|app| {
-            if cfg!(target_os = "macos") {
+            #[cfg(target_os = "macos")]
+            {
                 let win = app.get_window("main").unwrap();
                 win.set_transparent_titlebar();
             }

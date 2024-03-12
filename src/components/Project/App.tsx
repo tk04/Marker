@@ -15,6 +15,7 @@ import { join } from "@tauri-apps/api/path";
 import { Projects, Dir } from "@/utils/types";
 import Selector from "./Selector";
 import { BsHouse } from "react-icons/bs";
+import { isMacOS } from "@tiptap/core";
 
 interface props {
   project: Dir;
@@ -79,10 +80,11 @@ const App: React.FC<props> = ({ project }) => {
       <div className="group/menu">
         <div
           className={`${!collapse && "opacity-0 group-hover/menu:opacity-100"
-            } max-w-[210px] w-full px-3 pl-20 pt-[5px] fixed pb-5 z-10 transition-all duration-100`}
+            } max-w-[210px] w-full px-3 ${(isMacOS() || !collapse) && "pl-20"
+            } pt-[5px] fixed pb-5 z-10 transition-all duration-100`}
         >
           <div
-            className={`flex px-2 gap-3 w-full ${collapse ? "justify-start" : "justify-end"
+            className={`transition-all duration-50 flex px-2 gap-3 w-full ${collapse ? "ml-0" : "ml-14"
               } items-center mt-1 pb-2`}
           >
             <a

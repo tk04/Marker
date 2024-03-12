@@ -5,7 +5,7 @@ import {
   writeTextFile,
   type FileEntry,
 } from "@tauri-apps/api/fs";
-import { EditorContent } from "@tiptap/react";
+import { EditorContent, isMacOS } from "@tiptap/react";
 import Titles from "./Titles";
 import { useEffect, useState } from "react";
 import Menu from "./Menu";
@@ -75,7 +75,7 @@ const Editor: React.FC<props> = ({
         {editor.storage.characterCount.words()} words
       </p>
       <div
-        className={`h-fit pb-2 flex items-center justify-between px-5 z-20 transition-all duration-50 pt-[7px] ${collapse ? "ml-[140px]" : "ml-[210px]"
+        className={`h-fit pb-2 flex items-center justify-between px-5 z-20 transition-all duration-50 pt-[7px] ${collapse ? (isMacOS() ? "ml-[130px]" : "ml-[55px]") : "ml-[210px]"
           }`}
       >
         <div className="flex items-center gap-5">

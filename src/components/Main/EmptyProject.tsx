@@ -1,5 +1,4 @@
 import docSrc from "/docs.svg";
-import { open } from "@tauri-apps/api/shell";
 
 const EmptyProject = () => {
   return (
@@ -8,9 +7,9 @@ const EmptyProject = () => {
         <img src={docSrc} width={400} />
         <p className="text-neutral-600 text-[10px] -mt-10 m-auto">
           Illustrations by{" "}
-          <button onClick={() => open("https://storyset.com/")}>
+          <a href="https://storyset.com/?open=true" target="_blank">
             Storyset
-          </button>
+          </a>
         </p>
       </div>
     </div>

@@ -1,5 +1,7 @@
 import { Editor } from "@tiptap/react";
 
+import { TbTrash } from "react-icons/tb";
+import { FiEdit } from "react-icons/fi";
 import { getLinkText } from "../hasLink";
 import {
   Popover,
@@ -69,14 +71,14 @@ const LinkPopover: React.FC<props> = ({ editor }) => {
   return (
     <div
       ref={ref}
-      className="absolute border px-3 py-1 bg-white rounded-md text-neutral-500 z-10"
+      className="absolute shadow-sm border px-3 py-1 bg-white rounded-md text-neutral-500 z-10"
       style={{ display: "none" }}
     >
       {editor.isActive("link") && (
         <div className="flex text-[13px] z-10">
           <a
-            href={editor.getAttributes("link").href}
-            className="text-blue-400 underline"
+            href={editor.getAttributes("link").href + "?open=true"}
+            className="text-blue-400 underline cursor-pointer"
             target="_blank"
           >
             {editor.getAttributes("link").href}
@@ -84,7 +86,7 @@ const LinkPopover: React.FC<props> = ({ editor }) => {
           <p className="mx-2">-</p>
           <Popover open={open} onOpenChange={(val) => setOpen(val)}>
             <PopoverTrigger className="underline mx-2" onClick={clickHandler}>
-              Edit
+              <FiEdit />
             </PopoverTrigger>
             <PopoverContent>
               <form
@@ -154,7 +156,7 @@ const LinkPopover: React.FC<props> = ({ editor }) => {
                 .run()
             }
           >
-            Remove
+            <TbTrash />
           </button>
         </div>
       )}

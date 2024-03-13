@@ -9,6 +9,7 @@ import {
 } from "react-router-dom";
 import { getProject, getCurrProject } from "@/utils/appStore";
 import { lazy } from "react";
+import { Toaster } from "./components/ui/toaster.tsx";
 const Project = lazy(() => import("./Project.tsx"));
 
 const router = createBrowserRouter([
@@ -39,6 +40,7 @@ const router = createBrowserRouter([
 ]);
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
+    <Toaster />
     <RouterProvider router={router} />
   </React.StrictMode>,
 );

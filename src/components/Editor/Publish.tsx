@@ -51,8 +51,8 @@ const Publish: React.FC<props> = ({ filePath, projectPath, reRender }) => {
         cwd: dir,
       },
     ).execute();
-    if (addCmd.stderr) {
-      setError(addCmd.stderr);
+    if (addCmd.code != 0) {
+      setError(addCmd.stderr || addCmd.stdout);
       return;
     }
 
@@ -63,16 +63,16 @@ const Publish: React.FC<props> = ({ filePath, projectPath, reRender }) => {
         cwd: dir,
       },
     ).execute();
-    if (commitCmd.stderr) {
-      setError(commitCmd.stderr);
+    if (commitCmd.code != 0) {
+      setError(commitCmd.stderr || commitCmd.stdout);
       return;
     }
 
     const pushCmd = await new Command("git", ["push"], {
       cwd: dir,
     }).execute();
-    if (pushCmd.stderr) {
-      setError(pushCmd.stderr);
+    if (pushCmd.code != 0) {
+      setError(pushCmd.stderr || pushCmd.stdout);
       return;
     }
     //re-render to show changes in updated markdown content

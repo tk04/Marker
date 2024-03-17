@@ -37,7 +37,7 @@ const service = new TurndownService({
 service.addRule("paragraph", {
   filter: "p",
 
-  replacement: function(content, node) {
+  replacement: function (content, node) {
     if (node.parentNode?.nodeName == "LI") {
       return content;
     }
@@ -47,7 +47,7 @@ service.addRule("paragraph", {
 service.addRule("listItem", {
   filter: "li",
 
-  replacement: function(content, node, options) {
+  replacement: function (content, node, options) {
     content = content
       .replace(/^\n+/, "") // remove leading newlines
       .replace(/\n+$/, "\n") // replace trailing newlines with just a single one

@@ -109,11 +109,11 @@ const Editor: React.FC<props> = ({
       </div>
 
       <div
-        className={`transition-all duration-50 h-full overflow-auto ${
+        className={`editor  transition-all duration-50 h-full overflow-auto ${
           collapse ? "ml-0" : "ml-[230px] lg:ml-0"
         }`}
       >
-        <div className="flex flex-col editor pt-20 grow max-w-[580px] lg:max-w-[736px] m-auto w-full h-full">
+        <div className="flex flex-col pt-20 grow max-w-[580px] lg:max-w-[736px] m-auto w-full h-full">
           <div className="text-editor grow justify-center flex flex-col">
             <Titles
               metadata={metadata}

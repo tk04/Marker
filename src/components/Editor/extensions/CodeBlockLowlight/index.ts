@@ -2,6 +2,8 @@ import CodeBlock, { type CodeBlockOptions } from "@tiptap/extension-code-block";
 import { common, createLowlight } from "lowlight";
 
 import { LowlightPlugin } from "./lowlightPlugin";
+import { ReactNodeViewRenderer } from "@tiptap/react";
+import CodeBlockView from "../../NodeViews/CodeBlockView";
 
 export interface CodeBlockLowlightOptions extends CodeBlockOptions {
   lowlight: any;
@@ -15,6 +17,9 @@ lowlight.registerAlias({
   typescript: ["ts"],
 });
 const CodeBlockLowlight = CodeBlock.extend<CodeBlockLowlightOptions>({
+  addNodeView() {
+    return ReactNodeViewRenderer(CodeBlockView);
+  },
   addOptions() {
     return {
       ...this.parent?.(),

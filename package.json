@@ -1,7 +1,7 @@
 {
   "name": "Marker",
   "type": "module",
-  "version": "0.0.1",
+  "version": "1.0.1",
   "scripts": {
     "dev": "vite --port 3000",
     "build": "tsc && vite build",

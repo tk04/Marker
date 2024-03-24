@@ -1,8 +1,14 @@
 import CharacterCount from "@tiptap/extension-character-count";
 import BubbleMenu from "@tiptap/extension-bubble-menu";
 
-import { useEditor, ReactNodeViewRenderer } from "@tiptap/react";
+import { v4 as uuidv4 } from "uuid";
+import {
+  useEditor,
+  ReactNodeViewRenderer,
+  textblockTypeInputRule,
+} from "@tiptap/react";
 import Image from "@tiptap/extension-image";
+import Heading from "@tiptap/extension-heading";
 import BulletList from "@tiptap/extension-bullet-list";
 import ListItem from "@tiptap/extension-list-item";
 import OrderedList from "@tiptap/extension-ordered-list";
@@ -13,13 +19,15 @@ import Placeholder from "@tiptap/extension-placeholder";
 import ImageView from "@/components/Editor/NodeViews/Image/Image";
 import CodeBlockLowlight from "@/components/Editor/extensions/CodeBlockLowlight";
 import { RichTextLink } from "@/components/Editor/extensions/link-text";
+import { Editor } from "@tiptap/core";
 
 interface props {
   content: string;
   onUpdate?: () => void;
+  onCreate?: (editor?: Editor) => void;
   folderPath: string;
 }
-const useTextEditor = ({ content, onUpdate, folderPath }: props) => {
+const useTextEditor = ({ content, onUpdate, onCreate, folderPath }: props) => {
   const editor = useEditor({
     editorProps: {
       attributes: {
@@ -100,15 +108,48 @@ const useTextEditor = ({ content, onUpdate, folderPath }: props) => {
         },
       }),
       CodeBlockLowlight,
+      Heading.extend({
+        addAttributes() {
+          return {
+            ...this.parent?.(),
+            id: {
+              default: "",
+              parseHTML: () => uuidv4(),
+            },
+          };
+        },
+        addPasteRules() {
+          return this.options.levels.map((level: number) => {
+            return textblockTypeInputRule({
+              find: new RegExp(`^(#{1,${level}})\\s$`),
+              type: this.type,
+              getAttributes: {
+                level,
+                id: uuidv4(),
+              },
+            });
+          });
+        },
+        addInputRules() {
+          return this.options.levels.map((level: number) => {
+            return textblockTypeInputRule({
+              find: new RegExp(`^(#{1,${level}})\\s$`),
+              type: this.type,
+              getAttributes: {
+                level,
+                id: uuidv4(),
+              },
+            });
+          });
+        },
+      }),
       StarterKit.configure({
         orderedList: false,
         bulletList: false,
         listItem: false,
         codeBlock: false,
         code: false,
-        heading: {
-          levels: [1, 2, 3, 4, 5, 6],
-        },
+        heading: false,
       }),
 
       RichTextLink.configure({
@@ -123,6 +164,9 @@ const useTextEditor = ({ content, onUpdate, folderPath }: props) => {
     ],
     content,
     onUpdate,
+    onCreate({ editor }) {
+      if (onCreate) onCreate(editor);
+    },
   });
 
   return editor;

@@ -7,7 +7,7 @@ interface props {
 const TableOfContents: React.FC<props> = ({ toc }) => {
   return (
     <div className="text-sm w-[200px] font-light">
-      <h1 className="font-medium">Table of Contents</h1>
+      <h1 className="font-medium font-mono">Table of Contents</h1>
       <hr className="my-2" />
       {toc.map((element) => (
         <button

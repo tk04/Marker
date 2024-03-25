@@ -123,10 +123,10 @@ const useTextEditor = ({ content, onUpdate, onCreate, folderPath }: props) => {
             return textblockTypeInputRule({
               find: new RegExp(`^(#{1,${level}})\\s$`),
               type: this.type,
-              getAttributes: {
+              getAttributes: () => ({
                 level,
                 id: uuidv4(),
-              },
+              }),
             });
           });
         },
@@ -135,10 +135,10 @@ const useTextEditor = ({ content, onUpdate, onCreate, folderPath }: props) => {
             return textblockTypeInputRule({
               find: new RegExp(`^(#{1,${level}})\\s$`),
               type: this.type,
-              getAttributes: {
+              getAttributes: () => ({
                 level,
                 id: uuidv4(),
-              },
+              }),
             });
           });
         },

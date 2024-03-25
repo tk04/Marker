@@ -56,7 +56,8 @@
     "turndown": "^7.1.2",
     "typescript": "^5.3.3",
     "uuid": "^9.0.1",
-    "yaml": "^2.4.0"
+    "yaml": "^2.4.0",
+    "zustand": "^4.5.2"
   },
   "devDependencies": {
     "@tauri-apps/cli": "^1.5.10",

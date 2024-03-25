@@ -3,7 +3,7 @@ import { Label } from "../ui/label";
 import { Button } from "../ui/button";
 import { createProject } from "@/utils/appStore";
 import { open } from "@tauri-apps/api/dialog";
-import { Dispatch, ReactNode, SetStateAction, useRef, useState } from "react";
+import { ReactNode, useRef, useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -12,20 +12,19 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Projects } from "@/utils/types";
+import useStore from "@/store/appStore";
 
 const defaultClass =
   "hover:bg-black/80 p-2 w-full rounded-md bg-black text-white font-medium";
 interface props {
-  setProjects: Dispatch<SetStateAction<Projects | undefined>>;
   children: ReactNode;
   className?: string;
 }
 const AddProject: React.FC<props> = ({
-  setProjects,
   children,
   className = defaultClass,
 }) => {
+  const setProjects = useStore((s) => s.setProjects);
   const [error, setError] = useState<string>();
   const nameRef = useRef<HTMLInputElement>(null);
   const [dir, setDir] = useState<string | null>(null);

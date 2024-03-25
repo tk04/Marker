@@ -1,22 +1,14 @@
 import type { FileEntry } from "@tauri-apps/api/fs";
-import { useState, type Dispatch, type SetStateAction, useRef } from "react";
+import { useState, useRef } from "react";
 import File from "./File";
 import { IoIosArrowForward } from "react-icons/io";
 import CreateFile from "./createFile";
 interface props {
   file: FileEntry;
-  setCurrFile: Dispatch<SetStateAction<FileEntry | undefined>>;
   addFile: (path: string, filename: string) => Promise<void>;
-  currFile?: FileEntry;
   root?: boolean;
 }
-const FileTree: React.FC<props> = ({
-  root,
-  file,
-  setCurrFile,
-  currFile,
-  addFile,
-}) => {
+const FileTree: React.FC<props> = ({ root, file, addFile }) => {
   const [toggle, setToggle] = useState(root);
   const filenameRef = useRef<HTMLInputElement>(null);
   const [create, setCreate] = useState(false);
@@ -45,8 +37,9 @@ const FileTree: React.FC<props> = ({
           >
             <IoIosArrowForward
               size={15}
-              className={`${toggle ? "rotate-90" : "rotate-0"
-                } transition-all duration-75`}
+              className={`${
+                toggle ? "rotate-90" : "rotate-0"
+              } transition-all duration-75`}
             />
             <p className="text-sm">{file.name}</p>
           </div>
@@ -59,20 +52,9 @@ const FileTree: React.FC<props> = ({
           <div className="pl-5">
             {file.children?.map((file) =>
               file.children ? (
-                <FileTree
-                  currFile={currFile}
-                  addFile={addFile}
-                  setCurrFile={setCurrFile}
-                  file={file}
-                  key={file.path}
-                />
+                <FileTree addFile={addFile} file={file} key={file.path} />
               ) : (
-                <File
-                  currFile={currFile}
-                  setCurrFile={setCurrFile}
-                  file={file}
-                  key={file.path}
-                />
+                <File file={file} key={file.path} />
               ),
             )}
           </div>

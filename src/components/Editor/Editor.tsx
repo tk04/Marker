@@ -62,22 +62,27 @@ const Editor: React.FC<props> = ({
     // @ts-ignores
     const content = (editor || initEditor).state.doc.content.content as Node[];
     const headings: TOC = [];
-    let prevLevel = Number.MAX_VALUE;
+    let prevLevel: number | null = null;
     for (let i = 0; i < content.length; i++) {
       const node = content[i];
-
       if (node.type.name === "heading") {
-        let currLvl =
-          node.attrs.level < prevLevel
-            ? 1
-            : node.attrs.level == prevLevel
-              ? headings[headings.length - 1].level
-              : prevLevel + 1;
+        let currLvl;
+        if (prevLevel != null) {
+          let lastVal = headings[headings.length - 1].level;
+          currLvl =
+            node.attrs.level < prevLevel
+              ? node.attrs.level
+              : node.attrs.level == prevLevel
+                ? lastVal
+                : lastVal + 1;
+        } else {
+          currLvl = 1;
+        }
         prevLevel = node.attrs.level;
         headings.push({ level: currLvl, node: node });
       }
-      setToc(headings);
     }
+    setToc(headings);
   }
   useEffect(() => {
     setSaving(false);
@@ -89,6 +94,9 @@ const Editor: React.FC<props> = ({
       };
     }
   }, [updateContent, metadata]);
+  useEffect(() => {
+    editor?.commands.focus();
+  }, [editor]);
   if (!editor) return;
 
   return (
@@ -131,16 +139,15 @@ const Editor: React.FC<props> = ({
         </div>
       </div>
 
-      <div className="fixed right-10 top-[200px] hidden xl:block">
+      <div className="border-l h-screen fixed right-0 pt-[200px] hidden xl:block">
         <TableOfContents toc={toc} />
       </div>
-
       <div
         className={`editor transition-all duration-50 h-full overflow-auto ${!collapse ? "ml-[200px] px-5 lg:px-0 lg:ml-0" : "ml-0"
           } transition-all duration-75`}
       >
-        <div className={`flex flex-col pt-20 grow`}>
-          <div className="text-editor grow justify-center flex flex-col max-w-[580px] lg:pl-20 xl:pl-0 lg:max-w-[736px] m-auto w-full h-full">
+        <div className={`flex flex-col pt-20 h-full`}>
+          <div className="text-editor grow justify-center flex flex-col max-w-[580px] lg:pl-20 xl:pl-0 lg:max-w-[736px] m-auto w-full">
             <Titles
               metadata={metadata}
               setMetadata={setMetadata}
@@ -149,7 +156,7 @@ const Editor: React.FC<props> = ({
 
             <EditorContent
               editor={editor}
-              className="pb-44 px-2 md:px-0 grow"
+              className="pb-44 px-2 md:px-0 grow h-full"
             />
           </div>
         </div>

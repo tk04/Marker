@@ -6,15 +6,15 @@ interface props {
 }
 const TableOfContents: React.FC<props> = ({ toc }) => {
   return (
-    <div className="text-sm w-[200px] font-light">
+    <div className="text-sm w-[220px] font-light px-5">
       <h1 className="font-medium font-mono">Table of Contents</h1>
-      <hr className="my-2" />
+      <hr className="my-2 -mx-5" />
       {toc.map((element) => (
         <button
           key={element.node.attrs.id}
           className="block whitespace-nowrap w-full overflow-hidden text-ellipsis py-1 cursor-pointer hover:underline text-left"
           style={{
-            marginLeft: `${(element.level - 1) * 10}px`,
+            marginLeft: `${(element.level - 1) * 12}px`,
           }}
           onClick={() => {
             const el = document.querySelector(

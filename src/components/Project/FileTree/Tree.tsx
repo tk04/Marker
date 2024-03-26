@@ -1,15 +1,15 @@
-import type { FileEntry } from "@tauri-apps/api/fs";
 import { useState, useRef } from "react";
 import File from "./File";
 import { IoIosArrowForward } from "react-icons/io";
-import CreateFile from "./createFile";
+import CreateFile from "../createFile";
+import { FileInfo } from "@/utils/getFileMeta";
+
 interface props {
-  file: FileEntry;
+  file: FileInfo;
   addFile: (path: string, filename: string) => Promise<void>;
-  root?: boolean;
 }
-const FileTree: React.FC<props> = ({ root, file, addFile }) => {
-  const [toggle, setToggle] = useState(root);
+const Tree: React.FC<props> = ({ file, addFile }) => {
+  const [toggle, setToggle] = useState(false);
   const filenameRef = useRef<HTMLInputElement>(null);
   const [create, setCreate] = useState(false);
   function createHandler() {
@@ -18,41 +18,30 @@ const FileTree: React.FC<props> = ({ root, file, addFile }) => {
   }
   return (
     <div>
-      {root ? (
-        <div className="ml-5">
-          <div className="flex group justify-between items-center mt-10 mb-2">
-            <h1 className="text-xl">Files</h1>
-            <CreateFile onClick={createHandler} root={root} />
-          </div>
-          <hr className="-ml-5 -mr-5" />
-        </div>
-      ) : (
+      <div
+        className="flex justify-between items-center gap-2 cursor-pointer -mx-5 group has-[:not(.addFile:hover)]:hover:bg-neutral-200 has-[.addFile:hover]:hover:bg-opacity-0 pr-3"
+        key={file.path}
+      >
         <div
-          className="flex justify-between items-center gap-2 cursor-pointer -mx-5 group has-[:not(.addFile:hover)]:hover:bg-neutral-200 has-[.addFile:hover]:hover:bg-opacity-0 pr-3"
-          key={file.path}
+          className="flex gap-2 items-center w-full h-full px-4 py-2"
+          onClick={() => setToggle((p) => !p)}
         >
-          <div
-            className="flex gap-2 items-center w-full h-full px-4 py-2"
-            onClick={() => setToggle((p) => !p)}
-          >
-            <IoIosArrowForward
-              size={15}
-              className={`${
-                toggle ? "rotate-90" : "rotate-0"
+          <IoIosArrowForward
+            size={15}
+            className={`${toggle ? "rotate-90" : "rotate-0"
               } transition-all duration-75`}
-            />
-            <p className="text-sm">{file.name}</p>
-          </div>
-          <CreateFile onClick={createHandler} />
+          />
+          <p className="text-sm">{file.name}</p>
         </div>
-      )}
+        <CreateFile onClick={createHandler} />
+      </div>
 
       {toggle && (
-        <div className={`${!root && "border-l border-neutral-300"}`}>
+        <div className="border-l border-neutral-300">
           <div className="pl-5">
             {file.children?.map((file) =>
               file.children ? (
-                <FileTree addFile={addFile} file={file} key={file.path} />
+                <Tree addFile={addFile} file={file} key={file.path} />
               ) : (
                 <File file={file} key={file.path} />
               ),
@@ -86,4 +75,4 @@ const FileTree: React.FC<props> = ({ root, file, addFile }) => {
     </div>
   );
 };
-export default FileTree;
+export default Tree;

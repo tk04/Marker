@@ -1,5 +1,5 @@
 import { Store } from "tauri-plugin-store-api";
-import type { Projects, Dir } from "./types";
+import type { Projects, Dir, SortInfo } from "./types";
 
 const store = new Store(".apps.dat");
 
@@ -32,13 +32,20 @@ async function deleteProject(id: string) {
   return projects;
 }
 
-async function getCurrProject(): Promise<string | null> {
+async function getCurrProject(): Promise<Dir | null> {
   return store.get("currProject");
 }
-async function setCurrProject(id: string) {
-  await store.set("currProject", id);
+async function setCurrProject(project: Dir) {
+  await store.set("currProject", project);
 }
 
+async function setSortInfo(sortInfo: SortInfo) {
+  await store.set("sortInfo", sortInfo);
+}
+
+async function getSortInfo(): Promise<SortInfo | null> {
+  return store.get("sortInfo");
+}
 export {
   getProjects,
   getProject,
@@ -46,4 +53,6 @@ export {
   deleteProject,
   getCurrProject,
   setCurrProject,
+  getSortInfo,
+  setSortInfo,
 };

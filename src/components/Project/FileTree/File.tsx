@@ -11,9 +11,8 @@ const File: React.FC<props> = ({ file }) => {
   }));
   return (
     <div
-      className={`flex items-center gap-2 cursor-pointer -mx-5 hover:bg-neutral-200  px-5 py-2 ${
-        currFile?.path == file.path && "bg-neutral-200/80"
-      }`}
+      className={`flex items-center gap-2 cursor-pointer -mx-5 hover:bg-neutral-200  px-5 py-2 ${currFile?.path == file.path && "bg-neutral-200/80"
+        }`}
       onClick={() => setCurrFile(file)}
       key={file.path}
     >

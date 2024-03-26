@@ -1,17 +1,19 @@
-import { Dir, Projects } from "@/utils/types";
-import { FileEntry } from "@tauri-apps/api/fs";
+import { setCurrProject, setSortInfo } from "@/utils/appStore";
+import { FileInfo } from "@/utils/getFileMeta";
+import { Dir, Projects, SortInfo } from "@/utils/types";
 import { create } from "zustand";
-
 interface AppState {
   currProject?: Dir;
   projects: Projects;
-  files: FileEntry[];
-  currFile?: FileEntry;
+  files: FileInfo[];
+  currFile?: FileInfo;
+  sortInfo?: SortInfo;
 
-  setCurrFile: (name?: FileEntry) => void;
+  setCurrFile: (name?: FileInfo) => void;
   setProjects: (projects: Projects) => void;
   setCurrProject: (project: Dir) => void;
-  setFiles: (files: FileEntry[]) => void;
+  setFiles: (files: FileInfo[]) => void;
+  setSortInfo: (sortInfo: SortInfo) => Promise<void>;
 }
 const useStore = create<AppState>()((set) => ({
   currProject: undefined,
@@ -20,9 +22,20 @@ const useStore = create<AppState>()((set) => ({
   currFile: undefined,
 
   setCurrFile: (currFile) => set(() => ({ currFile })),
-  setCurrProject: (project) => set(() => ({ currProject: project })),
+  setCurrProject: async (project) => {
+    set(() => ({ currProject: project }));
+    await setCurrProject(project);
+  },
+
   setProjects: (projects) => set(() => ({ projects })),
   setFiles: (files) => set(() => ({ files })),
+
+  setSortInfo: async (sortInfo) => {
+    set(() => ({
+      sortInfo,
+    }));
+    await setSortInfo(sortInfo);
+  },
 }));
 
 export default useStore;

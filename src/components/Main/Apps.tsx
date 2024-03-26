@@ -1,4 +1,4 @@
-import { getProjects, deleteProject } from "@/utils/appStore";
+import { deleteProject } from "@/utils/appStore";
 
 import { useEffect, useState } from "react";
 import Projects from "./Projects";
@@ -12,9 +12,6 @@ const Apps = () => {
     setProjects: s.setProjects,
   }));
   const [empty, setEmpty] = useState(false);
-  useEffect(() => {
-    getProjects().then((e) => setProjects(e));
-  }, []);
   useEffect(() => {
     if (projects && Object.keys(projects).length == 0) {
       setEmpty(true);

@@ -10,7 +10,10 @@ import {
 import { getProject, getCurrProject } from "@/utils/appStore";
 import { lazy } from "react";
 import { Toaster } from "./components/ui/toaster.tsx";
+import restoreState from "./store/restoreState.ts";
 const Project = lazy(() => import("./Project.tsx"));
+
+restoreState();
 
 const router = createBrowserRouter([
   {
@@ -21,7 +24,7 @@ const router = createBrowserRouter([
       if (home) return null;
       const currProj = await getCurrProject();
       if (currProj) {
-        return redirect(`/project/${currProj}`);
+        return redirect(`/project/${currProj.id}`);
       }
       return null;
     },

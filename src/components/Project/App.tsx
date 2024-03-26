@@ -15,13 +15,15 @@ import {
 import { useEffect, useState } from "react";
 import Editor from "../Editor/Editor";
 import { MdKeyboardDoubleArrowLeft } from "react-icons/md";
-import FileTree from "./FileTree";
 import { Dir } from "@/utils/types";
 import Selector from "./Selector";
 import { BsHouse } from "react-icons/bs";
 import { isMacOS } from "@tiptap/core";
 import CommandMenu from "../Settings/CommandMenu";
 import useStore from "@/store/appStore";
+import { FileInfo, getFileMeta } from "@/utils/getFileMeta";
+import Root from "./FileTree/Root";
+import { Link } from "react-router-dom";
 
 interface props {
   project: Dir;
@@ -49,7 +51,7 @@ const App: React.FC<props> = ({ project }) => {
       recursive: true,
     });
 
-    async function processEntries(entries: FileEntry[], arr: any[]) {
+    async function processEntries(entries: FileEntry[], arr: FileInfo[]) {
       for (const entry of entries) {
         if (entry.name?.startsWith(".")) {
           continue;
@@ -57,16 +59,20 @@ const App: React.FC<props> = ({ project }) => {
         if (entry.children) {
           let subArr: any[] = [];
           processEntries(entry.children, subArr);
-          arr.push({ ...entry, children: subArr });
+          arr.push({
+            ...entry,
+            children: subArr,
+            meta: await getFileMeta(entry),
+          });
         } else {
           if (!entry.name?.endsWith(".md")) {
             continue;
           }
-          arr.push(entry);
+          arr.push({ ...entry, meta: await getFileMeta(entry) });
         }
       }
     }
-    const files: any[] = [];
+    const files: FileInfo[] = [];
     await processEntries(entries, files);
     setFiles(files);
   }
@@ -76,7 +82,7 @@ const App: React.FC<props> = ({ project }) => {
   }
   useEffect(() => {
     setCurrFile(undefined);
-    storeVisitedProject(project.id);
+    storeVisitedProject(project);
     setCurrProject(project);
     getProject();
   }, [project]);
@@ -110,12 +116,12 @@ const App: React.FC<props> = ({ project }) => {
               collapse ? "ml-0" : "ml-14"
             } items-center mt-1 pb-2`}
           >
-            <a
-              href="/?home=true"
+            <Link
+              to="/?home=true"
               className={`cursor-pointer h-fit text-neutral-500`}
             >
               <BsHouse />
-            </a>
+            </Link>
             <div
               className={`cursor-pointer h-fit text-neutral-500 ${
                 collapse && "rotate-180"
@@ -131,11 +137,10 @@ const App: React.FC<props> = ({ project }) => {
             collapse ? "-left-[210px]" : "left-0"
           }`}
         >
-          <div className="text-gray-700 overflow-y-auto h-full pr-5 overflow-x-hidden w-full">
-            <FileTree
+          <div className="text-gray-700 overflow-y-auto h-full pr-3 overflow-x-hidden w-full">
+            <Root
               addFile={addFileHandler}
               file={{ name: "root", path: project!.dir, children: files }}
-              root={true}
             />
           </div>
           <Selector />

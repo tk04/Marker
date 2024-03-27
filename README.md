@@ -8,6 +8,11 @@
 
 Navigate to the [release page](https://github.com/tk04/Marker/releases) and select the installer that matches your platform.
 
+#### Using Hombrew
+```bash
+$ brew install --cask tk04/tap/marker
+```
+
 ## Building Locally
 
 To build Marker locally, clone this repo and run the following commands (make sure to have Rust already installed on your system):

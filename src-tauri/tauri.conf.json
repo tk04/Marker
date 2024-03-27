@@ -84,7 +84,7 @@
     "updater": {
       "active": true,
       "endpoints": [
-        "https://marker.pages.dev/{{target}}/{{arch}}/{{current_version}}"
+        "https://github.com/tk04/Marker/releases/download/master/latest.json"
       ],
       "dialog": true,
       "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDc3MTU3NzVGQ0U5NzQyMDEKUldRQlFwZk9YM2NWZHg1TUZLVlI1Z3VMOStTY1lSeENJb2R1cnpnQjgzZk5TS0c3SFFha2VPWVoK"

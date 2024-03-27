@@ -1,8 +1,15 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
-use std::fs::File;
-use std::io::{BufRead, BufReader};
+use serde::{Deserialize, Serialize};
+use std::fs::metadata;
+use std::time::SystemTime;
 use tauri::{Manager, Window};
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct FileMeta {
+    pub created_at: Option<SystemTime>,
+    pub updated_at: Option<SystemTime>,
+}
 
 pub enum ToolbarThickness {
     Thick,
@@ -41,38 +48,17 @@ impl WindowExt for Window {
     }
 }
 #[tauri::command]
-fn get_file_metadata(file_path: String) -> Result<String, String> {
-    let file = match File::open(&file_path) {
-        Ok(file) => file,
-        Err(err) => return Err(format!("Error opening file: {}", err)),
-    };
-    let mut metadata = String::new();
-    let mut metadata_started = false;
-
-    let reader = BufReader::new(file);
-
-    for line in reader.lines() {
-        let line = match line {
-            Ok(line) => line,
-            Err(err) => return Err(format!("Error reading line: {}", err)),
+fn get_file_metadata(filepath: String) -> FileMeta {
+    if let Ok(meta) = metadata(filepath) {
+        return FileMeta {
+            updated_at: meta.modified().ok(),
+            created_at: meta.created().ok(),
         };
-
-        if !metadata_started && line.trim() == "---" {
-            metadata_started = true;
-            continue;
-        }
-
-        if metadata_started && line.trim() == "---" {
-            break;
-        }
-
-        if metadata_started {
-            metadata.push_str(&line);
-            metadata.push('\n');
-        }
     }
-
-    Ok(metadata)
+    FileMeta {
+        created_at: None,
+        updated_at: None,
+    }
 }
 
 fn main() {

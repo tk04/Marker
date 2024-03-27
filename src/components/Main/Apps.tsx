@@ -1,17 +1,17 @@
-import { getProjects, deleteProject } from "@/utils/appStore";
+import { deleteProject } from "@/utils/appStore";
 
 import { useEffect, useState } from "react";
-import type { Projects as ProjectsType } from "@/utils/types";
 import Projects from "./Projects";
 import EmptyProject from "./EmptyProject";
 import AddProject from "./AddProject";
+import useStore from "@/store/appStore";
 
 const Apps = () => {
-  const [projects, setProjects] = useState<ProjectsType>();
+  const { projects, setProjects } = useStore((s) => ({
+    projects: s.projects,
+    setProjects: s.setProjects,
+  }));
   const [empty, setEmpty] = useState(false);
-  useEffect(() => {
-    getProjects().then((e) => setProjects(e));
-  }, []);
   useEffect(() => {
     if (projects && Object.keys(projects).length == 0) {
       setEmpty(true);
@@ -32,7 +32,7 @@ const Apps = () => {
       ) : (
         <Projects projects={projects} deleteHandler={deleteHandler} />
       )}
-      <AddProject setProjects={setProjects}>Add Project</AddProject>
+      <AddProject>Add Project</AddProject>
     </div>
   );
 };

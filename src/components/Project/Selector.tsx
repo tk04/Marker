@@ -3,19 +3,21 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Projects, Dir } from "@/utils/types";
-import { Dispatch, SetStateAction, useState } from "react";
+import { useState } from "react";
 import { BsFolder2Open } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import CreateProject from "../Main/AddProject";
 import { MdAdd } from "react-icons/md";
-interface props {
-  projects: Projects;
-  currProject: Dir;
-  setProjects: Dispatch<SetStateAction<Projects | undefined>>;
-}
-const Selector: React.FC<props> = ({ projects, currProject, setProjects }) => {
+import useStore from "@/store/appStore";
+
+const Selector = () => {
+  const { projects, currProject } = useStore((s) => ({
+    projects: s.projects,
+    currProject: s.currProject,
+  }));
   const [open, setOpen] = useState(false);
+
+  if (!currProject) return;
   return (
     <Popover open={open} onOpenChange={(e) => setOpen(e)}>
       <PopoverTrigger
@@ -37,8 +39,9 @@ const Selector: React.FC<props> = ({ projects, currProject, setProjects }) => {
               key={p[0]}
               to={`/project/${p[0]}`}
               onClick={() => setOpen(false)}
-              className={`block border-b py-4 px-5 last:border-b-0 hover:bg-neutral-100 hover:cursor-pointer ${p[1].dir == currProject.dir && "bg-neutral-100"
-                }`}
+              className={`block border-b py-4 px-5 last:border-b-0 hover:bg-neutral-100 hover:cursor-pointer ${
+                p[1].dir == currProject.dir && "bg-neutral-100"
+              }`}
             >
               <div className="flex items-center gap-2 text-neutral-700">
                 <BsFolder2Open />
@@ -48,10 +51,7 @@ const Selector: React.FC<props> = ({ projects, currProject, setProjects }) => {
             </Link>
           ))}
         </div>
-        <CreateProject
-          setProjects={setProjects}
-          className="px-5 py-2 w-full text-sm border-t hover:bg-neutral-100 outline-none"
-        >
+        <CreateProject className="px-5 py-2 w-full text-sm border-t hover:bg-neutral-100 outline-none">
           <div className="flex gap-1 items-center">
             <MdAdd />
             Add Project

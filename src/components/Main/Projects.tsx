@@ -7,7 +7,7 @@ import type { Projects } from "@/utils/types";
 import { TbTrash } from "react-icons/tb";
 import { Link } from "react-router-dom";
 interface props {
-  projects: Projects;
+  projects: Projects | [];
   deleteHandler: (id: string) => void;
 }
 const Projects: React.FC<props> = ({ projects, deleteHandler }) => {

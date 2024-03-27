@@ -13,7 +13,11 @@ import LinkPopover from "./Popover/Link";
 import useTextEditor from "@/hooks/useEditor.ts";
 import Publish from "./Publish";
 import { markdownToHtml, htmlToMarkdown } from "@/utils/markdown";
+import { Node } from "@tiptap/pm/model";
+import TableOfContents from "./TableOfContents";
+import { Editor as EditorType } from "@tiptap/core";
 
+export type TOC = { node: Node; level: number }[];
 interface props {
   file: FileEntry;
   content: string;
@@ -32,11 +36,13 @@ const Editor: React.FC<props> = ({
 }) => {
   const [metadata, setMetadata] = useState(fileMetadata);
   const [saving, setSaving] = useState(false);
+  const [toc, setToc] = useState<TOC>([]);
   const [error, setError] = useState(false);
   const [updateContent, setUpdateContent] = useState(0);
   const editor = useTextEditor({
     content,
     onUpdate,
+    onCreate: updateTOC,
     folderPath: file.path,
   });
 
@@ -48,22 +54,49 @@ const Editor: React.FC<props> = ({
     mdContent += htmlToMarkdown(editor?.getHTML() || "");
     await writeTextFile(file.path, mdContent).catch(() => setError(true));
 
+    updateTOC();
     setSaving(false);
     setUpdateContent(0);
   }
-
+  function updateTOC(initEditor?: EditorType) {
+    // @ts-ignores
+    const content = (editor || initEditor).state.doc.content.content as Node[];
+    const headings: TOC = [];
+    let prevLevel: number | null = null;
+    for (let i = 0; i < content.length; i++) {
+      const node = content[i];
+      if (node.type.name === "heading") {
+        let currLvl;
+        if (prevLevel != null) {
+          let lastVal = headings[headings.length - 1].level;
+          currLvl =
+            node.attrs.level < prevLevel
+              ? node.attrs.level
+              : node.attrs.level == prevLevel
+              ? lastVal
+              : lastVal + 1;
+        } else {
+          currLvl = 1;
+        }
+        prevLevel = node.attrs.level;
+        headings.push({ level: currLvl, node: node });
+      }
+    }
+    setToc(headings);
+  }
   useEffect(() => {
     setSaving(false);
     if (updateContent) {
       setSaving(true);
       const timeout = setTimeout(saveFile, 800);
       return () => {
-        if (timeout) {
-          clearTimeout(timeout);
-        }
+        clearTimeout(timeout);
       };
     }
   }, [updateContent, metadata]);
+  useEffect(() => {
+    editor?.commands.focus();
+  }, [editor]);
   if (!editor) return;
 
   return (
@@ -75,7 +108,7 @@ const Editor: React.FC<props> = ({
         {editor.storage.characterCount.words()} words
       </p>
       <div
-        className={`h-fit pb-2 flex items-center justify-between px-5 z-20 transition-all duration-50 pt-[7px] ${
+        className={`duration-75 transition-all h-fit pb-2 flex items-center justify-between px-5 z-20 pt-[7px] ${
           collapse ? (isMacOS() ? "ml-[130px]" : "ml-[55px]") : "ml-[210px]"
         }`}
       >
@@ -108,13 +141,16 @@ const Editor: React.FC<props> = ({
         </div>
       </div>
 
+      <div className="border-l h-screen fixed right-0 pt-[170px] hidden xl:block overflow-hidden hover:overflow-y-auto z-0 hover:z-10">
+        <TableOfContents toc={toc} />
+      </div>
       <div
-        className={`editor  transition-all duration-50 h-full overflow-auto ${
-          collapse ? "ml-0" : "ml-[230px] lg:ml-0"
-        }`}
+        className={`editor transition-all duration-50 h-full overflow-auto ${
+          !collapse ? "ml-[200px] px-5 lg:px-0 lg:ml-0" : "ml-0"
+        } transition-all duration-75`}
       >
-        <div className="flex flex-col pt-20 grow max-w-[580px] lg:max-w-[736px] m-auto w-full h-full">
-          <div className="text-editor grow justify-center flex flex-col">
+        <div className={`flex flex-col pt-20 h-full`}>
+          <div className="text-editor grow justify-center flex flex-col max-w-[580px] lg:pl-20 xl:pl-0 lg:max-w-[736px] m-auto w-full">
             <Titles
               metadata={metadata}
               setMetadata={setMetadata}
@@ -123,7 +159,7 @@ const Editor: React.FC<props> = ({
 
             <EditorContent
               editor={editor}
-              className="pb-44 px-2 md:px-0 grow"
+              className="pb-44 px-2 md:px-0 grow h-full"
             />
           </div>
         </div>

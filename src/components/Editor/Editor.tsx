@@ -93,10 +93,13 @@ const Editor: React.FC<props> = ({
         clearTimeout(timeout);
       };
     }
-  }, [updateContent, metadata]);
+  }, [updateContent]);
+
   useEffect(() => {
-    editor?.commands.focus();
-  }, [editor]);
+    setMetadata(fileMetadata);
+    setUpdateContent(0);
+  }, [fileMetadata]);
+
   if (!editor) return;
 
   return (
@@ -177,11 +180,11 @@ const MainEditor = ({
   projectPath: string;
   collapse: boolean;
 }) => {
-  const [content, setContent] = useState<null | string>(null);
+  const [content, setContent] = useState<string>("");
   const [metadata, setMetadata] = useState<{ [key: string]: any }>({});
 
   async function getContent() {
-    setContent(null);
+    setContent("");
     let data = await readTextFile(file.path);
     const linesIdx = data.indexOf("---", 2);
     if (data.startsWith("---") && linesIdx != -1) {
@@ -189,6 +192,8 @@ const MainEditor = ({
       const parsed = yaml.parse(metadataText);
       setMetadata(parsed);
       data = data.slice(data.indexOf("---", 2) + 4);
+    } else {
+      setMetadata({});
     }
     const parsedHTML = await markdownToHtml(data);
     setContent(parsedHTML);
@@ -196,7 +201,6 @@ const MainEditor = ({
   useEffect(() => {
     getContent();
   }, [file.path]);
-  if (content == null) return;
   return (
     <Editor
       projectPath={projectPath}

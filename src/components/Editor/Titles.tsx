@@ -42,7 +42,7 @@ const Titles: React.FC<props> = ({ metadata, setMetadata, onUpdate }) => {
         className="outline-none text-5xl font-semibold resize-none mt-10 w-full block"
         rows={1}
         placeholder="Enter title..."
-        defaultValue={metadata?.title}
+        value={metadata?.title || ""}
         onChange={(e) => {
           setMetadata((p) => ({ ...p, title: e.target.value }));
           onUpdate();
@@ -53,7 +53,7 @@ const Titles: React.FC<props> = ({ metadata, setMetadata, onUpdate }) => {
         className="text-md text-gray-700/70 outline-none resize-none w-full block mt-2"
         rows={1}
         placeholder="Enter subtitle..."
-        defaultValue={metadata?.subtitle}
+        value={metadata?.subtitle || ""}
         onChange={(e) => {
           setMetadata((p) => ({ ...p, subtitle: e.target.value }));
           onUpdate();

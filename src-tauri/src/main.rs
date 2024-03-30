@@ -4,6 +4,8 @@ use serde::{Deserialize, Serialize};
 use std::fs::metadata;
 use std::time::SystemTime;
 use tauri::{Manager, Window};
+mod md_parser;
+use md_parser::md_to_html;
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct FileMeta {
@@ -72,7 +74,7 @@ fn main() {
             Ok(())
         })
         .plugin(tauri_plugin_store::Builder::default().build())
-        .invoke_handler(tauri::generate_handler![get_file_metadata])
+        .invoke_handler(tauri::generate_handler![get_file_metadata, md_to_html])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

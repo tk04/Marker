@@ -150,7 +150,6 @@ const App: React.FC<props> = ({ project }) => {
         {currFile && (
           <Editor
             file={currFile}
-            key={currFile.path}
             projectPath={project?.dir || ""}
             collapse={collapse}
           />

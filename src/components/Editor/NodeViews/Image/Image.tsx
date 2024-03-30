@@ -11,13 +11,23 @@ import type props from "../types";
 import getImgUrl from "@/utils/getImgUrl";
 
 var imageExtensions = ["jpg", "jpeg", "png", "gif", "bmp", "webp", "heif"];
-const ImageView: React.FC<props> = ({ node, selected, updateAttributes }) => {
+const ImageView: React.FC<props> = ({
+  editor,
+  node,
+  selected,
+  updateAttributes,
+}) => {
   const ref = useRef<HTMLDivElement>(null);
+  const [src, setSrc] = useState<string>(node.attrs?.src);
   const [open, setOpen] = useState(false);
   const [isImg, setIsImage] = useState(true);
   async function updateAssetSrc() {
-    const src = await getImgUrl(node.attrs.folderPath, node.attrs.src);
-    updateAttributes({ src, imgPath: node.attrs.src });
+    const src = await getImgUrl(
+      //@ts-ignore - folderPath will always be set
+      editor.options.editorProps.attributes.folderPath,
+      node.attrs.src,
+    );
+    setSrc(src);
   }
   useEffect(() => {
     if (
@@ -47,10 +57,10 @@ const ImageView: React.FC<props> = ({ node, selected, updateAttributes }) => {
         )}px] ${selected && "outline outline-[3px] outline-[#7bf]"}`}
       >
         {isImg ? (
-          <img src={node.attrs.src} />
+          <img src={src} />
         ) : (
           <video className="video" controls>
-            <source src={node.attrs.src} />
+            <source src={src} />
           </video>
         )}
         {selected && isImg && (

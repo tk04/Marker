@@ -34,6 +34,34 @@ const service = new TurndownService({
   codeBlockStyle: "fenced",
   bulletListMarker: "-",
 });
+
+service.addRule("table", {
+  filter: "table",
+
+  replacement: function (content) {
+    return "\n\n" + content + "\n\n";
+  },
+});
+service.addRule("tableRow", {
+  filter: "tr",
+
+  replacement: function (_, node) {
+    let body = "";
+    let sep = "";
+    for (let i = 0; i < node.children.length; i++) {
+      const item = node.children[i];
+      body += `| ${item.textContent} `;
+      if (item.nodeName == "TH") {
+        sep += "| " + "-".repeat(item.textContent?.length || 1) + " ";
+      }
+    }
+    body += " |";
+    if (sep != "") {
+      body += "\n" + sep + " |";
+    }
+    return "\n" + body + "\n";
+  },
+});
 service.addRule("paragraph", {
   filter: "p",
 

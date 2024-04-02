@@ -121,8 +121,9 @@ const Editor: React.FC<props> = ({
         {editor.storage.characterCount.words()} words
       </p>
       <div
-        className={`duration-75 transition-all h-fit pb-2 flex items-center justify-between px-5 z-20 pt-[7px] ${collapse ? (isMacOS() ? "ml-[130px]" : "ml-[55px]") : "ml-[210px]"
-          }`}
+        className={`duration-75 transition-all h-fit pb-2 flex items-center justify-between px-5 z-20 pt-[7px] ${
+          collapse ? (isMacOS() ? "ml-[130px]" : "ml-[55px]") : "ml-[210px]"
+        }`}
       >
         <div className="flex items-center gap-5">
           <div className="flex items-center gap-2 text-neutral-400 text-sm">
@@ -143,8 +144,9 @@ const Editor: React.FC<props> = ({
         <TableOfContents toc={toc} />
       </div>
       <div
-        className={`editor transition-all duration-50 h-full overflow-auto ${!collapse ? "ml-[200px] px-5 lg:px-0 lg:ml-0" : "ml-0"
-          } transition-all duration-75`}
+        className={`editor transition-all duration-50 h-full overflow-auto ${
+          !collapse ? "ml-[200px] px-5 lg:px-0 lg:ml-0" : "ml-0"
+        } transition-all duration-75`}
       >
         <div className={`flex flex-col pt-20 h-full`}>
           <div className="text-editor grow justify-center flex flex-col max-w-[580px] lg:pl-20 xl:pl-0 lg:max-w-[736px] m-auto w-full">

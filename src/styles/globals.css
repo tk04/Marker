@@ -348,6 +348,7 @@ p,
 .tiptap {
   table {
     border-collapse: collapse;
+    border-radius: 2px;
     margin: 0;
     overflow: hidden;
     table-layout: fixed;
@@ -355,7 +356,8 @@ p,
 
     td,
     th {
-      border: 2px solid #ced4da;
+      border: 1.5px solid;
+      @apply border-neutral-200;
       box-sizing: border-box;
       min-width: 60px;
       padding: 3px 5px;
@@ -368,7 +370,7 @@ p,
     }
 
     th {
-      background-color: #f1f3f5;
+      @apply bg-neutral-200/50;
       font-weight: bold;
       text-align: left;
     }

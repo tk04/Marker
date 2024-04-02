@@ -25,6 +25,7 @@ import ImageView from "@/components/Editor/NodeViews/Image/Image";
 import CodeBlockLowlight from "@/components/Editor/extensions/CodeBlockLowlight";
 import { RichTextLink } from "@/components/Editor/extensions/link-text";
 import TableView from "@/components/Editor/NodeViews/TableView";
+import { DeleteCells } from "@/lib/tableShortcut";
 
 interface props {
   content: string;
@@ -70,6 +71,15 @@ const useTextEditor = ({ content, onUpdate, folderPath }: props) => {
               },
             },
           ];
+        },
+        addKeyboardShortcuts() {
+          return {
+            ...this.parent?.(),
+            Backspace: DeleteCells,
+            "Mod-Backspace": DeleteCells,
+            Delete: DeleteCells,
+            "Mod-Delete": DeleteCells,
+          };
         },
       }),
       TableRow,

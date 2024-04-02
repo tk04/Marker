@@ -19,19 +19,18 @@ import Placeholder from "@tiptap/extension-placeholder";
 import ImageView from "@/components/Editor/NodeViews/Image/Image";
 import CodeBlockLowlight from "@/components/Editor/extensions/CodeBlockLowlight";
 import { RichTextLink } from "@/components/Editor/extensions/link-text";
-import { Editor } from "@tiptap/core";
 
 interface props {
   content: string;
-  onUpdate?: () => void;
-  onCreate?: (editor?: Editor) => void;
+  onUpdate: () => void;
   folderPath: string;
 }
-const useTextEditor = ({ content, onUpdate, onCreate, folderPath }: props) => {
+const useTextEditor = ({ content, onUpdate, folderPath }: props) => {
   const editor = useEditor({
     editorProps: {
       attributes: {
         class: `prose h-full`,
+        folderPath,
       },
     },
     extensions: [
@@ -48,23 +47,7 @@ const useTextEditor = ({ content, onUpdate, onCreate, folderPath }: props) => {
             folderPath: {
               default: folderPath,
             },
-            imgPath: {
-              default: null,
-              parseHTML: (element) => {
-                return element.getAttribute("src");
-              },
-            },
           };
-        },
-        renderHTML({ HTMLAttributes }) {
-          let { imgPath, ...props } = HTMLAttributes;
-          return [
-            "img",
-            {
-              ...props,
-              src: imgPath,
-            },
-          ];
         },
         addInputRules() {
           return [
@@ -91,8 +74,6 @@ const useTextEditor = ({ content, onUpdate, onCreate, folderPath }: props) => {
                     tr.mapping.map(end),
                   );
                 }
-
-                tr.scrollIntoView();
               },
             },
           ];
@@ -164,9 +145,6 @@ const useTextEditor = ({ content, onUpdate, onCreate, folderPath }: props) => {
     ],
     content,
     onUpdate,
-    onCreate({ editor }) {
-      if (onCreate) onCreate(editor);
-    },
   });
 
   return editor;

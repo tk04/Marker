@@ -35,14 +35,11 @@ const Editor: React.FC<props> = ({
   collapse,
 }) => {
   const [metadata, setMetadata] = useState(fileMetadata);
-  const [saving, setSaving] = useState(false);
   const [toc, setToc] = useState<TOC>([]);
-  const [error, setError] = useState(false);
   const [updateContent, setUpdateContent] = useState(0);
   const editor = useTextEditor({
     content,
     onUpdate,
-    onCreate: updateTOC,
     folderPath: file.path,
   });
 
@@ -52,10 +49,13 @@ const Editor: React.FC<props> = ({
   async function saveFile() {
     let mdContent = "---\n" + yaml.stringify(metadata) + "---\n";
     mdContent += htmlToMarkdown(editor?.getHTML() || "");
-    await writeTextFile(file.path, mdContent).catch(() => setError(true));
+    await writeTextFile(file.path, mdContent).catch(() =>
+      alert(
+        "An error occurred when trying to save this file. Try again later.",
+      ),
+    );
 
     updateTOC();
-    setSaving(false);
     setUpdateContent(0);
   }
   function updateTOC(initEditor?: EditorType) {
@@ -73,8 +73,8 @@ const Editor: React.FC<props> = ({
             node.attrs.level < prevLevel
               ? node.attrs.level
               : node.attrs.level == prevLevel
-              ? lastVal
-              : lastVal + 1;
+                ? lastVal
+                : lastVal + 1;
         } else {
           currLvl = 1;
         }
@@ -85,18 +85,31 @@ const Editor: React.FC<props> = ({
     setToc(headings);
   }
   useEffect(() => {
-    setSaving(false);
     if (updateContent) {
-      setSaving(true);
-      const timeout = setTimeout(saveFile, 800);
+      const timeout = setTimeout(saveFile, 200);
       return () => {
         clearTimeout(timeout);
       };
     }
-  }, [updateContent, metadata]);
+  }, [updateContent]);
+
   useEffect(() => {
-    editor?.commands.focus();
-  }, [editor]);
+    if (!editor) return;
+    editor?.commands.setContent(content);
+    editor?.setOptions({
+      editorProps: {
+        attributes: {
+          folderPath: file.path,
+        },
+      },
+    });
+
+    updateTOC();
+    setMetadata(fileMetadata);
+    editor?.commands.focus("start");
+    document.querySelector(".editor")?.scroll({ top: 0 });
+  }, [content]);
+
   if (!editor) return;
 
   return (
@@ -108,26 +121,11 @@ const Editor: React.FC<props> = ({
         {editor.storage.characterCount.words()} words
       </p>
       <div
-        className={`duration-75 transition-all h-fit pb-2 flex items-center justify-between px-5 z-20 pt-[7px] ${
-          collapse ? (isMacOS() ? "ml-[130px]" : "ml-[55px]") : "ml-[210px]"
-        }`}
+        className={`duration-75 transition-all h-fit pb-2 flex items-center justify-between px-5 z-20 pt-[7px] ${collapse ? (isMacOS() ? "ml-[130px]" : "ml-[55px]") : "ml-[210px]"
+          }`}
       >
         <div className="flex items-center gap-5">
           <div className="flex items-center gap-2 text-neutral-400 text-sm">
-            <div
-              className={`w-2 h-2 ${
-                error
-                  ? "bg-red-500"
-                  : !saving
-                  ? "bg-green-500"
-                  : "bg-orange-400"
-              } rounded-full`}
-            ></div>
-            <p className="inter">
-              Draft -{" "}
-              {error ? "An error occurred" : saving ? "saving..." : "saved"}
-            </p>
-            <p>-</p>
             <p>{file.path.replace(projectPath + "/", "")}</p>
           </div>
         </div>
@@ -145,9 +143,8 @@ const Editor: React.FC<props> = ({
         <TableOfContents toc={toc} />
       </div>
       <div
-        className={`editor transition-all duration-50 h-full overflow-auto ${
-          !collapse ? "ml-[200px] px-5 lg:px-0 lg:ml-0" : "ml-0"
-        } transition-all duration-75`}
+        className={`editor transition-all duration-50 h-full overflow-auto ${!collapse ? "ml-[200px] px-5 lg:px-0 lg:ml-0" : "ml-0"
+          } transition-all duration-75`}
       >
         <div className={`flex flex-col pt-20 h-full`}>
           <div className="text-editor grow justify-center flex flex-col max-w-[580px] lg:pl-20 xl:pl-0 lg:max-w-[736px] m-auto w-full">
@@ -177,11 +174,11 @@ const MainEditor = ({
   projectPath: string;
   collapse: boolean;
 }) => {
-  const [content, setContent] = useState<null | string>(null);
+  const [content, setContent] = useState<string>("");
   const [metadata, setMetadata] = useState<{ [key: string]: any }>({});
 
   async function getContent() {
-    setContent(null);
+    setContent("");
     let data = await readTextFile(file.path);
     const linesIdx = data.indexOf("---", 2);
     if (data.startsWith("---") && linesIdx != -1) {
@@ -189,6 +186,8 @@ const MainEditor = ({
       const parsed = yaml.parse(metadataText);
       setMetadata(parsed);
       data = data.slice(data.indexOf("---", 2) + 4);
+    } else {
+      setMetadata({});
     }
     const parsedHTML = await markdownToHtml(data);
     setContent(parsedHTML);
@@ -196,7 +195,6 @@ const MainEditor = ({
   useEffect(() => {
     getContent();
   }, [file.path]);
-  if (content == null) return;
   return (
     <Editor
       projectPath={projectPath}

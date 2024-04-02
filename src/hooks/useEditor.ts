@@ -19,16 +19,13 @@ import Placeholder from "@tiptap/extension-placeholder";
 import ImageView from "@/components/Editor/NodeViews/Image/Image";
 import CodeBlockLowlight from "@/components/Editor/extensions/CodeBlockLowlight";
 import { RichTextLink } from "@/components/Editor/extensions/link-text";
-import { Editor } from "@tiptap/core";
-import { useEffect } from "react";
 
 interface props {
   content: string;
   onUpdate: () => void;
-  onCreate: (editor?: Editor) => void;
   folderPath: string;
 }
-const useTextEditor = ({ content, onUpdate, onCreate, folderPath }: props) => {
+const useTextEditor = ({ content, onUpdate, folderPath }: props) => {
   const editor = useEditor({
     editorProps: {
       attributes: {
@@ -150,21 +147,6 @@ const useTextEditor = ({ content, onUpdate, onCreate, folderPath }: props) => {
     onUpdate,
   });
 
-  useEffect(() => {
-    if (editor) {
-      editor?.commands.setContent(content);
-      editor.setOptions({
-        editorProps: {
-          attributes: {
-            folderPath,
-          },
-        },
-      });
-      onCreate(editor);
-      editor.commands.focus("start");
-      document.querySelector(".editor")?.scroll({ top: 0 });
-    }
-  }, [content]);
   return editor;
 };
 export default useTextEditor;

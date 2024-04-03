@@ -6,21 +6,21 @@ import props from "./types";
 const TableView: React.FC<props> = ({ editor }) => {
   return (
     <NodeViewWrapper>
-      <div className="flex">
+      <div className="flex" autoCorrect="false" autoCapitalize="false">
         <div>
           <NodeViewContent />
-          <div
-            className="cursor-pointer border border-black/70 text-sm text-center bg-white border-dashed mt-1 py-1 opacity-0 hover:opacity-100 select-none"
+          <button
+            className="absolute w-[calc(100%-30px)] cursor-pointer border border-black/70 text-sm text-center bg-white border-dashed mt-1 py-1 opacity-0 hover:opacity-100 select-none"
             onClick={() => {
               editor.commands.addRowAfter();
             }}
           >
             <HiPlus size={17} className="inline" />
-          </div>
+          </button>
         </div>
 
         <button
-          className="block border border-black/70 text-sm text-center bg-white border-dashed opacity-0 hover:opacity-100 mb-9 ml-2 px-1 select-none"
+          className="block border border-black/70 text-sm text-center bg-white border-dashed opacity-0 hover:opacity-100 ml-1 px-1 select-none"
           onClick={() => {
             editor.commands.addColumnAfter();
           }}

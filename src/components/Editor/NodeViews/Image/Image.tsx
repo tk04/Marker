@@ -46,7 +46,7 @@ const ImageView: React.FC<props> = ({
       updateAssetSrc();
     }
 
-    const ext: string = node.attrs.src.split(".").pop();
+    const ext: string = node.attrs.src.split("?")[0].split(".").pop();
     setIsImage(imageExtensions.includes(ext.toLowerCase()));
   }, [node.attrs.src]);
 

@@ -16,9 +16,16 @@ import StarterKit from "@tiptap/starter-kit";
 import Code from "@tiptap/extension-code";
 import Placeholder from "@tiptap/extension-placeholder";
 
+import Table from "@tiptap/extension-table";
+import TableCell from "@tiptap/extension-table-cell";
+import TableHeader from "@tiptap/extension-table-header";
+import TableRow from "@tiptap/extension-table-row";
+
 import ImageView from "@/components/Editor/NodeViews/Image/Image";
 import CodeBlockLowlight from "@/components/Editor/extensions/CodeBlockLowlight";
 import { RichTextLink } from "@/components/Editor/extensions/link-text";
+import TableView from "@/components/Editor/NodeViews/TableView";
+import { DeleteCells } from "@/lib/tableShortcut";
 
 interface props {
   content: string;
@@ -34,6 +41,50 @@ const useTextEditor = ({ content, onUpdate, folderPath }: props) => {
       },
     },
     extensions: [
+      Table.extend({
+        addNodeView() {
+          return ReactNodeViewRenderer(TableView, {
+            contentDOMElementTag: "table",
+          });
+        },
+        addInputRules() {
+          return [
+            {
+              find: /table(\r\n|\r|\n)/,
+              type: this.type,
+              handler({ state, range, match, commands }) {
+                const { tr } = state;
+                const { $from } = state.selection;
+                const start = range.from;
+                let end = range.to;
+
+                const isEmptyLine =
+                  $from.parent.textContent.trim() === match[0].slice(0, -1);
+                if (isEmptyLine) {
+                  tr.delete(tr.mapping.map(start), tr.mapping.map(end));
+                  commands.insertTable({
+                    rows: 2,
+                    cols: 2,
+                    withHeaderRow: true,
+                  });
+                }
+              },
+            },
+          ];
+        },
+        addKeyboardShortcuts() {
+          return {
+            ...this.parent?.(),
+            Backspace: DeleteCells,
+            "Mod-Backspace": DeleteCells,
+            Delete: DeleteCells,
+            "Mod-Delete": DeleteCells,
+          };
+        },
+      }),
+      TableRow,
+      TableHeader,
+      TableCell,
       BubbleMenu.configure({
         element: document.querySelector(".menu") as HTMLElement,
       }),

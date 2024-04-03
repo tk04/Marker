@@ -71,6 +71,18 @@ dependencies:
   '@tiptap/extension-placeholder':
     specifier: ^2.0.3
     version: 2.2.4(@tiptap/core@2.2.4)(@tiptap/pm@2.2.4)
+  '@tiptap/extension-table':
+    specifier: ^2.2.4
+    version: 2.2.4(@tiptap/core@2.2.4)(@tiptap/pm@2.2.4)
+  '@tiptap/extension-table-cell':
+    specifier: ^2.2.4
+    version: 2.2.4(@tiptap/core@2.2.4)
+  '@tiptap/extension-table-header':
+    specifier: ^2.2.4
+    version: 2.2.4(@tiptap/core@2.2.4)
+  '@tiptap/extension-table-row':
+    specifier: ^2.2.4
+    version: 2.2.4(@tiptap/core@2.2.4)
   '@tiptap/pm':
     specifier: ^2.0.3
     version: 2.2.4
@@ -1953,6 +1965,40 @@ packages:
       '@tiptap/core': ^2.0.0
     dependencies:
       '@tiptap/core': 2.2.4(@tiptap/pm@2.2.4)
+    dev: false
+
+  /@tiptap/extension-table-cell@2.2.4(@tiptap/core@2.2.4):
+    resolution: {integrity: sha512-Dt3FjNjM1Mh2BgEjvx5+s96DiJpC82BdMtqicO3z/Pk0X1bn70ocMuURNR7upfRYI+9YbE3+3wBk/vY1yf7ydw==}
+    peerDependencies:
+      '@tiptap/core': ^2.0.0
+    dependencies:
+      '@tiptap/core': 2.2.4(@tiptap/pm@2.2.4)
+    dev: false
+
+  /@tiptap/extension-table-header@2.2.4(@tiptap/core@2.2.4):
+    resolution: {integrity: sha512-epRrB/468yGvKb/n6lW3VXWUpjMp3+mKxGWfsXLQncGb1leRbqkgQgsUUYuIEosk+70bjzz6lbfHKQBz408s3g==}
+    peerDependencies:
+      '@tiptap/core': ^2.0.0
+    dependencies:
+      '@tiptap/core': 2.2.4(@tiptap/pm@2.2.4)
+    dev: false
+
+  /@tiptap/extension-table-row@2.2.4(@tiptap/core@2.2.4):
+    resolution: {integrity: sha512-VItZ0byY5CVMrcSRrdBjhElHxIq1JQAAli+o3UNYM5rLKHKx4ezeBCUh80wIKvmaAxWsLMs8h/t4crxUE8dyHA==}
+    peerDependencies:
+      '@tiptap/core': ^2.0.0
+    dependencies:
+      '@tiptap/core': 2.2.4(@tiptap/pm@2.2.4)
+    dev: false
+
+  /@tiptap/extension-table@2.2.4(@tiptap/core@2.2.4)(@tiptap/pm@2.2.4):
+    resolution: {integrity: sha512-9aEFitlcSi33I6a8nGXQ2uNBEx0urYw/C9W4Ygl49YiMzLXtXDBTqSIzVpas1KkKOSN8yaOqB2UiQdbtqGV8fw==}
+    peerDependencies:
+      '@tiptap/core': ^2.0.0
+      '@tiptap/pm': ^2.0.0
+    dependencies:
+      '@tiptap/core': 2.2.4(@tiptap/pm@2.2.4)
+      '@tiptap/pm': 2.2.4
     dev: false
 
   /@tiptap/extension-text@2.2.4(@tiptap/core@2.2.4):

@@ -47,16 +47,17 @@ const Editor: React.FC<props> = ({
     setUpdateContent((p) => p + 1);
   }
   async function saveFile() {
-    let mdContent = "---\n" + yaml.stringify(metadata) + "---\n";
-    mdContent += htmlToMarkdown(editor?.getHTML() || "");
-    await writeTextFile(file.path, mdContent).catch(() =>
+    try {
+      let mdContent = "---\n" + yaml.stringify(metadata) + "---\n";
+      mdContent += htmlToMarkdown(editor?.getHTML() || "");
+      await writeTextFile(file.path, mdContent);
+      updateTOC();
+      setUpdateContent(0);
+    } catch {
       alert(
-        "An error occurred when trying to save this file. Try again later.",
-      ),
-    );
-
-    updateTOC();
-    setUpdateContent(0);
+        "An error occurred when trying to save this file. Let us know by opening an issue at https://github.com/tk04/marker",
+      );
+    }
   }
   function updateTOC(initEditor?: EditorType) {
     // @ts-ignores

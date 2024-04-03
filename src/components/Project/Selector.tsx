@@ -28,7 +28,7 @@ const Selector = () => {
           <BsFolder2Open size={18} />
           <h1 className="w-fit">{currProject.name}</h1>
         </div>
-        <p className="text-neutral-400 text-[10px] text-ellipsis overflow-hidden">
+        <p className="text-neutral-400 text-[10px] w-full whitespace-nowrap text-ellipsis overflow-hidden">
           {currProject.dir}
         </p>
       </PopoverTrigger>
@@ -39,9 +39,8 @@ const Selector = () => {
               key={p[0]}
               to={`/project/${p[0]}`}
               onClick={() => setOpen(false)}
-              className={`block border-b py-4 px-5 last:border-b-0 hover:bg-neutral-100 hover:cursor-pointer ${
-                p[1].dir == currProject.dir && "bg-neutral-100"
-              }`}
+              className={`block border-b py-4 px-5 last:border-b-0 hover:bg-neutral-100 hover:cursor-pointer ${p[1].dir == currProject.dir && "bg-neutral-100"
+                }`}
             >
               <div className="flex items-center gap-2 text-neutral-700">
                 <BsFolder2Open />

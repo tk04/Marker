@@ -10,7 +10,16 @@ import Options from "./Options";
 import type props from "../types";
 import getImgUrl from "@/utils/getImgUrl";
 
-var imageExtensions = ["jpg", "jpeg", "png", "gif", "bmp", "webp", "heif"];
+var imageExtensions = [
+  "svg",
+  "jpg",
+  "jpeg",
+  "png",
+  "gif",
+  "bmp",
+  "webp",
+  "heif",
+];
 const ImageView: React.FC<props> = ({
   editor,
   node,

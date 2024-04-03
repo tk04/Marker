@@ -10,7 +10,7 @@ const TableView: React.FC<props> = ({ editor }) => {
         <div>
           <NodeViewContent />
           <div
-            className="cursor-pointer border border-black/70 text-sm text-center bg-white border-dashed mt-1 opacity-0 hover:opacity-100 "
+            className="cursor-pointer border border-black/70 text-sm text-center bg-white border-dashed mt-1 py-1 opacity-0 hover:opacity-100 select-none"
             onClick={() => {
               editor.commands.addRowAfter();
             }}
@@ -20,7 +20,7 @@ const TableView: React.FC<props> = ({ editor }) => {
         </div>
 
         <button
-          className="block border border-black/70 text-sm text-center bg-white border-dashed opacity-0 hover:opacity-100 mb-7 ml-2"
+          className="block border border-black/70 text-sm text-center bg-white border-dashed opacity-0 hover:opacity-100 mb-9 ml-2 px-1 select-none"
           onClick={() => {
             editor.commands.addColumnAfter();
           }}

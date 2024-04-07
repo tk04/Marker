@@ -13,6 +13,17 @@ Navigate to the [release page](https://github.com/tk04/Marker/releases) and sele
 $ brew install --cask tk04/tap/marker
 ```
 
+#### [AUR](https://aur.archlinux.org/packages/marker-md) for Arch Linux
+##### Using `paru`
+```bash
+$ paru -S marker-md
+```
+
+##### Using `yay`
+```bash
+$ yay -S marker-md
+```
+
 ## Building Locally
 
 To build Marker locally, clone this repo and run the following commands (make sure to have Rust already installed on your system):

@@ -8,6 +8,7 @@ import { IoIosArrowForward } from "react-icons/io";
 import CreateFile from "../createFile";
 import { FileInfo } from "@/utils/getFileMeta";
 import removePath from "@/utils/removePath";
+import { resolveResource } from "@tauri-apps/api/path";
 
 interface props {
   file: FileInfo;
@@ -35,14 +36,20 @@ const Tree: React.FC<props> = ({ file, addFile }) => {
   return (
     <div>
       <div
-        onContextMenu={(e) => {
+        onContextMenu={async (e) => {
           e.preventDefault();
+          const trash = await resolveResource("assets/trash.svg");
           showMenu({
             pos: { x: e.clientX, y: e.clientY },
             items: [
               {
                 label: "Delete",
                 event: deleteFile,
+                icon: {
+                  path: trash,
+                  width: 12,
+                  height: 12,
+                },
               },
             ],
           });
@@ -59,7 +66,7 @@ const Tree: React.FC<props> = ({ file, addFile }) => {
             className={`${toggle ? "rotate-90" : "rotate-0"
               } transition-all duration-75`}
           />
-          <p className="text-sm">{file.name}</p>
+          <p className="text-sm select-none">{file.name}</p>
         </div>
         <CreateFile onClick={createHandler} />
       </div>

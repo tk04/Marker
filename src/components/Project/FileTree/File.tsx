@@ -4,7 +4,7 @@ import { showMenu } from "tauri-plugin-context-menu";
 import { removeFile, renameFile, type FileEntry } from "@tauri-apps/api/fs";
 import { confirm } from "@tauri-apps/api/dialog";
 import { useRef, useState } from "react";
-import { join } from "@tauri-apps/api/path";
+import { join, resolveResource } from "@tauri-apps/api/path";
 import removePath from "@/utils/removePath";
 
 interface props {
@@ -44,13 +44,31 @@ const File: React.FC<props> = ({ file }) => {
   }
   return (
     <div
-      onContextMenu={(e) => {
+      onContextMenu={async (e) => {
         e.preventDefault();
+        const pencil = await resolveResource("assets/pencil.svg");
+        const trash = await resolveResource("assets/trash.svg");
         showMenu({
           pos: { x: e.clientX, y: e.clientY },
           items: [
-            { label: "Rename", event: () => setShowInput(true) },
-            { label: "Delete", event: deleteFile },
+            {
+              label: "Rename",
+              event: () => setShowInput(true),
+              icon: {
+                path: pencil,
+                width: 12,
+                height: 12,
+              },
+            },
+            {
+              label: "Delete",
+              event: deleteFile,
+              icon: {
+                path: trash,
+                width: 12,
+                height: 12,
+              },
+            },
           ],
         });
       }}

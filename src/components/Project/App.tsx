@@ -103,18 +103,15 @@ const App: React.FC<props> = ({ project }) => {
   return (
     <div className="flex h-full">
       <CommandMenu />
-      <div className="group/menu">
+      <div className="group/menu select-none">
         <div
-          className={`${
-            !collapse && "opacity-0 group-hover/menu:opacity-100"
-          } max-w-[210px] w-full px-3 ${
-            (isMacOS() || !collapse) && "pl-20"
-          } pt-[5px] fixed pb-5 z-10 transition-all duration-100`}
+          className={`${!collapse && "opacity-0 group-hover/menu:opacity-100"
+            } max-w-[210px] w-full px-3 ${(isMacOS() || !collapse) && "pl-20"
+            } pt-[5px] fixed pb-5 z-10 transition-all duration-100`}
         >
           <div
-            className={`transition-all duration-50 flex px-2 gap-3 w-full ${
-              collapse ? "ml-0" : "ml-14"
-            } items-center mt-1 pb-2`}
+            className={`transition-all duration-50 flex px-2 gap-3 w-full ${collapse ? "ml-0" : "ml-14"
+              } items-center mt-1 pb-2`}
           >
             <Link
               to="/?home=true"
@@ -123,9 +120,8 @@ const App: React.FC<props> = ({ project }) => {
               <BsHouse />
             </Link>
             <div
-              className={`cursor-pointer h-fit text-neutral-500 ${
-                collapse && "rotate-180"
-              }`}
+              className={`cursor-pointer h-fit text-neutral-500 ${collapse && "rotate-180"
+                }`}
               onClick={() => setCollapse((p) => !p)}
             >
               <MdKeyboardDoubleArrowLeft size={20} />
@@ -133,9 +129,8 @@ const App: React.FC<props> = ({ project }) => {
           </div>
         </div>
         <div
-          className={`transition-all ease-in-out duration-50 max-w-[210px] w-full border-r pt-12 fixed bg-neutral-100 flex flex-col h-screen ${
-            collapse ? "-left-[210px]" : "left-0"
-          }`}
+          className={`transition-all ease-in-out duration-50 max-w-[210px] w-full border-r pt-12 fixed bg-neutral-100 flex flex-col h-screen ${collapse ? "-left-[210px]" : "left-0"
+            }`}
         >
           <div className="text-gray-700 overflow-y-auto h-full pr-3 overflow-x-hidden w-full">
             <Root

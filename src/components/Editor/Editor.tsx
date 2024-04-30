@@ -16,6 +16,7 @@ import { markdownToHtml, htmlToMarkdown } from "@/utils/markdown";
 import { Node } from "@tiptap/pm/model";
 import TableOfContents from "./TableOfContents";
 import { Editor as EditorType } from "@tiptap/core";
+import { ModeToggle } from "../Settings/Theme";
 
 export type TOC = { node: Node; level: number }[];
 interface props {
@@ -122,9 +123,8 @@ const Editor: React.FC<props> = ({
         {editor.storage.characterCount.words()} words
       </p>
       <div
-        className={`duration-75 transition-all h-fit pb-2 flex items-center justify-between px-5 z-20 pt-[7px] ${
-          collapse ? (isMacOS() ? "ml-[130px]" : "ml-[55px]") : "ml-[210px]"
-        }`}
+        className={`duration-75 transition-all h-fit pb-2 flex items-center justify-between px-5 z-20 pt-[7px] ${collapse ? (isMacOS() ? "ml-[130px]" : "ml-[55px]") : "ml-[210px]"
+          }`}
       >
         <div className="flex items-center gap-5">
           <div className="flex items-center gap-2 text-neutral-400 text-sm">
@@ -140,14 +140,14 @@ const Editor: React.FC<props> = ({
           />
         </div>
       </div>
+      <ModeToggle />
 
       <div className="border-l h-screen fixed right-0 pt-[170px] hidden xl:block overflow-hidden hover:overflow-y-auto z-0 hover:z-10">
         <TableOfContents toc={toc} />
       </div>
       <div
-        className={`editor transition-all duration-50 h-full overflow-auto ${
-          !collapse ? "ml-[200px] px-5 lg:px-0 lg:ml-0" : "ml-0"
-        } transition-all duration-75`}
+        className={`editor transition-all duration-50 h-full overflow-auto ${!collapse ? "ml-[200px] px-5 lg:px-0 lg:ml-0" : "ml-0"
+          } transition-all duration-75`}
       >
         <div className={`flex flex-col pt-20 h-full`}>
           <div className="text-editor grow justify-center flex flex-col max-w-[580px] lg:pl-20 xl:pl-0 lg:max-w-[736px] m-auto w-full">

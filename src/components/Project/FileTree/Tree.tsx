@@ -54,7 +54,7 @@ const Tree: React.FC<props> = ({ file, addFile }) => {
             ],
           });
         }}
-        className="flex justify-between items-center gap-2 cursor-pointer -mx-5 group has-[:not(.addFile:hover)]:hover:bg-neutral-200 has-[.addFile:hover]:hover:bg-opacity-0 pr-3"
+        className="flex justify-between items-center gap-2 cursor-pointer -mx-5 group has-[:not(.addFile:hover)]:hover:bg-accent has-[.addFile:hover]:hover:bg-opacity-0 pr-3"
         key={file.path}
       >
         <div
@@ -64,7 +64,7 @@ const Tree: React.FC<props> = ({ file, addFile }) => {
           <IoIosArrowForward
             size={15}
             className={`${toggle ? "rotate-90" : "rotate-0"
-              } transition-all duration-75`}
+              } transition-all duration-75 text-primary`}
           />
           <p className="text-sm select-none">{file.name}</p>
         </div>

@@ -24,6 +24,7 @@ import useStore from "@/store/appStore";
 import { FileInfo, getFileMeta } from "@/utils/getFileMeta";
 import Root from "./FileTree/Root";
 import { Link } from "react-router-dom";
+import { ModeToggle } from "../Settings/Theme";
 
 interface props {
   project: Dir;
@@ -129,9 +130,10 @@ const App: React.FC<props> = ({ project }) => {
           </div>
         </div>
         <div
-          className={`transition-all ease-in-out duration-50 max-w-[210px] w-full border-r pt-12 fixed bg-primary xbg-neutral-100 flex flex-col h-screen ${collapse ? "-left-[210px]" : "left-0"
+          className={`transition-all ease-in-out duration-50 max-w-[210px] w-full border-r pt-12 fixed bg-secondary flex flex-col h-screen ${collapse ? "-left-[210px]" : "left-0"
             }`}
         >
+          <ModeToggle />
           <div className="text-gray-700 overflow-y-auto h-full pr-3 overflow-x-hidden w-full">
             <Root
               addFile={addFileHandler}

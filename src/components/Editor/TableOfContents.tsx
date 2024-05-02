@@ -12,7 +12,7 @@ const TableOfContents: React.FC<props> = ({ toc }) => {
       {toc.map((element) => (
         <button
           key={element.node.attrs.id}
-          className="block whitespace-nowrap w-full overflow-hidden text-ellipsis py-1 cursor-pointer hover:underline text-left"
+          className="block text-primary whitespace-nowrap w-full overflow-hidden text-ellipsis py-1 cursor-pointer hover:underline text-left"
           style={{
             marginLeft: `${(element.level - 1) * 12}px`,
           }}

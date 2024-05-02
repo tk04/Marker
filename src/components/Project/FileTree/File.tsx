@@ -72,7 +72,7 @@ const File: React.FC<props> = ({ file }) => {
           ],
         });
       }}
-      className={` flex group items-center justify-between -mx-5 px-5 py-2 ${currFile?.path == file.path && "bg-neutral-200/80"} cursor-pointer has-[.dots:hover]:bg-opacity-0 hover:bg-neutral-200 `}
+      className={` flex group items-center justify-between -mx-5 px-5 py-2 ${currFile?.path == file.path && "bg-accent"} cursor-pointer has-[.dots:hover]:bg-opacity-0 hover:bg-accent `}
       onClick={() => setCurrFile(file)}
       key={file.path}
     >

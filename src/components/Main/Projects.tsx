@@ -24,7 +24,7 @@ const Projects: React.FC<props> = ({ projects, deleteHandler }) => {
           </Link>
           <div className="self-end opacity-0 group-hover:opacity-100 transition-all duration-150">
             <Popover>
-              <PopoverTrigger className="hover:bg-red-200/30 rounded-md m-2 p-1 hover:text-red-500 cursor-pointer">
+              <PopoverTrigger className="hover:bg-red-200/30 rounded-md m-2 p-1 hover:text-red-500 cursor-pointer text-primary">
                 <TbTrash />
               </PopoverTrigger>
               <PopoverContent className=" flex justify-between items-center text-xs">

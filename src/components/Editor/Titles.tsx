@@ -36,7 +36,7 @@ const Titles: React.FC<props> = ({ metadata, setMetadata, onUpdate }) => {
     };
   }, []);
   return (
-    <div className="mt-2 mb-5 px-2 md:px-0">
+    <div className="mt-2 mb-5 px-2 md:px-0 ">
       <textarea
         ref={titleRef}
         className="outline-none text-5xl font-semibold resize-none mt-10 w-full block"
@@ -50,7 +50,7 @@ const Titles: React.FC<props> = ({ metadata, setMetadata, onUpdate }) => {
       />
       <textarea
         ref={subTitleRef}
-        className="text-md text-gray-700/70 outline-none resize-none w-full block mt-2"
+        className="text-md text-gray-700/70 dark:text-gray-400 outline-none resize-none w-full block mt-2"
         rows={1}
         placeholder="Enter subtitle..."
         value={metadata?.subtitle || ""}

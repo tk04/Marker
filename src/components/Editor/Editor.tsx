@@ -115,7 +115,7 @@ const Editor: React.FC<props> = ({
   if (!editor) return;
 
   return (
-    <div className="h-screen flex flex-col">
+    <div className="h-screen flex flex-col dark:bg-zinc-900">
       <Menu editor={editor} />
       <LinkPopover editor={editor} />
 

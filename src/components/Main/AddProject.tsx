@@ -15,7 +15,7 @@ import {
 import useStore from "@/store/appStore";
 
 const defaultClass =
-  "hover:bg-black/80 p-2 w-full rounded-md bg-black text-white font-medium";
+  "p-2 w-full rounded-md bg-primary text-secondary font-medium";
 interface props {
   children: ReactNode;
   className?: string;

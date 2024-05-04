@@ -42,7 +42,10 @@ const CodeBlockView: React.FC<props> = ({ node, updateAttributes }) => {
           </PopoverTrigger>
           <PopoverContent className="w-[200px]  p-0">
             <Command>
-              <CommandInput placeholder="Search language..." className="h-9" />
+              <CommandInput
+                placeholder="Search language..."
+                className="h-9 !bg-transparent"
+              />
               <CommandEmpty>No language found.</CommandEmpty>
               <CommandList className="max-h-[200px] overflow-auto">
                 {langs.map((lang) => (

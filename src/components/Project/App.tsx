@@ -134,7 +134,7 @@ const App: React.FC<props> = ({ project }) => {
             }`}
         >
           <ModeToggle />
-          <div className="text-gray-700 overflow-y-auto h-full pr-3 overflow-x-hidden w-full">
+          <div className="overflow-y-auto h-full pr-3 overflow-x-hidden w-full">
             <Root
               addFile={addFileHandler}
               file={{ name: "root", path: project!.dir, children: files }}

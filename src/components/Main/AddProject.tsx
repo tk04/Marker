@@ -74,6 +74,7 @@ const AddProject: React.FC<props> = ({
             <Input
               id="name"
               placeholder="Project name"
+              className="!bg-background"
               ref={nameRef}
               required
             />
@@ -91,7 +92,7 @@ const AddProject: React.FC<props> = ({
               >
                 Select directory
               </Button>
-              {dir && <p className="text-sm text-neutral-700 mt-2">{dir}</p>}
+              {dir && <p className="text-sm mt-2">{dir}</p>}
             </div>
           </div>
         </div>

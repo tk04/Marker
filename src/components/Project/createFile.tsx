@@ -7,7 +7,7 @@ interface props {
 const CreateFile: React.FC<props> = ({ onClick, root }) => {
   return (
     <div
-      className={`addFile p-1 hover:bg-secondary ${!root && "invisible group-hover:visible"
+      className={`addFile p-1 hover:bg-accent ${!root && "invisible group-hover:visible"
         } z-20 w-fit rounded-md cursor-pointer`}
       title="Create file"
       onClick={onClick}

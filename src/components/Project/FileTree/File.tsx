@@ -85,7 +85,7 @@ const File: React.FC<props> = ({ file }) => {
         >
           <input
             ref={nameRef}
-            className="w-full overflow-auto"
+            className="w-full overflow-auto text-black"
             defaultValue={file.name}
             onBlur={() => setShowInput(false)}
             autoFocus

@@ -53,7 +53,7 @@ const Root: React.FC<props> = ({ file, addFile }) => {
         if (!a.meta?.updated_at || !b.meta?.updated_at) break;
         res = compare(
           a.meta.updated_at.secs_since_epoch >
-            b.meta.updated_at.secs_since_epoch,
+          b.meta.updated_at.secs_since_epoch,
         );
         break;
       }
@@ -62,7 +62,7 @@ const Root: React.FC<props> = ({ file, addFile }) => {
         if (!a.meta?.created_at || !b.meta?.created_at) break;
         res = compare(
           a.meta.created_at.secs_since_epoch >
-            b.meta.created_at.secs_since_epoch,
+          b.meta.created_at.secs_since_epoch,
         );
         break;
       }
@@ -84,7 +84,7 @@ const Root: React.FC<props> = ({ file, addFile }) => {
           <div className="flex items-center gap-1">
             <CreateFile onClick={createHandler} root={true} />
             <Popover>
-              <PopoverTrigger className="p-1 hover:bg-neutral-200 z-20 rounded-md cursor-pointer">
+              <PopoverTrigger className="p-1 hover:bg-accent z-20 rounded-md cursor-pointer text-primary">
                 <MdFilterList />
               </PopoverTrigger>
               <PopoverContent

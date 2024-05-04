@@ -71,7 +71,7 @@ const LinkPopover: React.FC<props> = ({ editor }) => {
   return (
     <div
       ref={ref}
-      className="absolute shadow-sm border px-3 py-1 bg-white rounded-md text-neutral-500 z-10"
+      className="absolute shadow-sm border px-3 py-1 bg-popover rounded-md text-neutral-500 z-10"
       style={{ display: "none" }}
     >
       {editor.isActive("link") && (
@@ -123,7 +123,7 @@ const LinkPopover: React.FC<props> = ({ editor }) => {
                   <input
                     defaultValue={text}
                     onChange={(e) => setText(e.target.value)}
-                    className="w-full text-[15px] border rounded-md px-2  focus:outline-none py-1"
+                    className="w-full text-[15px] border rounded-md px-2 focus:outline-none py-1"
                   />
                 </div>
 
@@ -133,12 +133,12 @@ const LinkPopover: React.FC<props> = ({ editor }) => {
                     <input
                       defaultValue={link}
                       onChange={(e) => setLink(e.target.value)}
-                      className="w-full text-[15px] border rounded-md px-2  focus:outline-none py-1"
+                      className="w-full text-[15px] border rounded-md px-2 focus:outline-none py-1"
                     />
                   </div>
                 </div>
                 <button
-                  className="bg-primary text-secondary rounded-md py-1 font-semibold  text-[13px] px-2 w-full hover:bg-neutral-600 "
+                  className="bg-primary text-secondary rounded-md py-1 font-semibold text-[13px] px-2 w-full mt-2"
                   type="submit"
                 >
                   Save

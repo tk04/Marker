@@ -11,7 +11,7 @@ const Options: React.FC<props> = ({ alt, updateAlt, closeModal }) => {
   return (
     <div className="text-sm">
       <form
-        className="w-56 py-1 xspace-y-1 space-y-5"
+        className="w-56 py-1 space-y-3"
         onSubmit={(e) => {
           e.preventDefault();
 
@@ -28,7 +28,7 @@ const Options: React.FC<props> = ({ alt, updateAlt, closeModal }) => {
           />
         </div>
         <button
-          className="bg-primary text-secondary rounded-md py-1 font-semibold  text-[13px] px-2 w-full hover:bg-neutral-600 "
+          className="bg-primary text-secondary rounded-md py-1 font-semibold text-[13px] px-2 w-full hover:opacity-80"
           type="submit"
         >
           Save

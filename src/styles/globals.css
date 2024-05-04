@@ -11,8 +11,8 @@
 }
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    --background: theme(colors.white);
+    --foreground: theme(colors.black);
 
     --muted: 210 40% 96.1%;
     --muted-foreground: theme(colors.neutral.500);
@@ -28,8 +28,8 @@
     --border: theme(colors.gray.200);
     --input: 214.3 31.8% 91.4%;
 
-    --primary: theme(colors.black);
-    --primary-foreground: 210 40% 98%;
+    --primary: theme(colors.neutral.700);
+    --primary-foreground: theme(colors.white);
 
     --secondary: theme(colors.neutral.100);
     --secondary-foreground: 222.2 47.4% 11.2%;
@@ -43,13 +43,20 @@
     --ring: 215 20.2% 65.1%;
 
     --radius: 0.5rem;
+
+    .code {
+      background-color: #6161611a;
+      color: #616161;
+    }
+
+    input {
+      @apply text-black;
+      @apply bg-white;
+    }
   }
 
   .dark {
-    /* --background: 222.2 84% 4.9%; */
     --background: theme(colors.neutral.800);
-
-    /* --foreground: 210 40% 98%; */
     --foreground: theme(colors.white);
 
     --muted: 217.2 32.6% 17.5%;
@@ -63,7 +70,6 @@
 
     --border: theme(colors.neutral.700);
     --input: theme(colors.neutral.500);
-    /* --input: 217.2 32.6% 17.5%; */
 
     --primary: theme(colors.neutral.300);
     --primary-foreground: theme(colors.neutral.800);
@@ -72,12 +78,22 @@
     --secondary-foreground: 210 40% 98%;
 
     --accent: theme(colors.neutral.700);
-    --accent-foreground: ;
+    /* --accent-foreground: ; */
 
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 85.7% 97.3%;
 
     --ring: theme(colors.white);
+
+    .code {
+      background-color: #94929229;
+      color: #949292;
+    }
+
+    input {
+      @apply text-white;
+      @apply bg-neutral-700;
+    }
   }
 }
 
@@ -87,29 +103,19 @@
   }
 }
 
-p,
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-label {
-  @apply text-primary;
-}
 body {
   max-width: 100vw;
   max-height: 100vh;
   @apply bg-popover;
+  @apply text-primary;
+  /* color: red; */
 }
 
 .ant-modal-content {
   border-radius: 0px !important;
 }
 .code {
-  background-color: #6161611a;
   border-radius: 0.25em;
-  color: #616161;
   font-size: 0.9rem;
   padding: 0.25em;
   font-weight: 400;
@@ -334,7 +340,6 @@ p,
 
 @keyframes slider {
   from {
-    /* transform: translateY(200px); */
     transform: scale(0.95);
   }
   to {
@@ -348,11 +353,13 @@ p,
 ::-webkit-scrollbar {
   height: 5px;
   width: 5px;
-  @apply bg-neutral-200;
+  @apply bg-accent;
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-neutral-400;
+  @apply bg-primary;
+  opacity: 0.6;
+
   -webkit-border-radius: 1ex;
 }
 
@@ -372,7 +379,7 @@ p,
     td,
     th {
       border: 1.5px solid;
-      @apply border-neutral-200;
+      @apply border-gray-300;
       box-sizing: border-box;
       min-width: 60px;
       padding: 3px 5px;
@@ -385,7 +392,7 @@ p,
     }
 
     th {
-      @apply bg-neutral-200/50;
+      @apply bg-accent;
       font-weight: bold;
       text-align: left;
     }
@@ -425,6 +432,7 @@ textarea {
 textarea::placeholder,
 .tiptap p.is-editor-empty:first-child::before {
   @apply text-neutral-500 !important;
+  opacity: 0.5;
 }
 li::marker {
   @apply text-primary;

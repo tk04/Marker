@@ -32,18 +32,18 @@ const Selector = () => {
           {currProject.dir}
         </p>
       </PopoverTrigger>
-      <PopoverContent className="m-0 p-0 border-gray-200 bg-neutral-100">
+      <PopoverContent className="m-0 p-0 border-gray-200 bg-neutral-100 text-black">
         <div>
           {Object.entries(projects).map((p) => (
             <Link
               key={p[0]}
               to={`/project/${p[0]}`}
               onClick={() => setOpen(false)}
-              className={`block border-b border-gray-300 py-4 px-5 last:border-b-0 hover:bg-neutral-200 hover:cursor-pointer ${p[1].dir == currProject.dir && "bg-primary"
+              className={`block border-b border-gray-300 py-4 px-5 last:border-b-0 hover:bg-neutral-200 hover:cursor-pointer ${p[1].dir == currProject.dir && "bg-neutral-200"
                 }`}
             >
-              <div className="flex items-center gap-2  !text-black xtext-primary xtext-neutral-700">
-                <BsFolder2Open />
+              <div className="flex items-center gap-2">
+                <BsFolder2Open className="" />
                 <h2 className="text-black text-[15px]">{p[1].name}</h2>
               </div>
               <p className="xtext-neutral-700 text-black xdark:text-neutral-300 text-[10px]">
@@ -52,7 +52,7 @@ const Selector = () => {
             </Link>
           ))}
         </div>
-        <CreateProject className="px-5 py-2 w-full text-sm border-t hover:bg-neutral-100 outline-none text-black">
+        <CreateProject className="px-5 py-2 w-full text-sm border-t hover:bg-neutral-100 outline-none">
           <div className="flex gap-1 items-center">
             <MdAdd />
             Add Project

@@ -11,3 +11,7 @@ export enum SortType {
   Asc,
   Desc,
 }
+
+export type Settings = {
+  showTOC?: boolean;
+};

@@ -1,6 +1,6 @@
 import { setCurrProject, setSortInfo } from "@/utils/appStore";
 import { FileInfo, getFileMeta } from "@/utils/getFileMeta";
-import { Dir, Projects, SortInfo } from "@/utils/types";
+import { Dir, Projects, Settings, SortInfo } from "@/utils/types";
 import { FileEntry, readDir } from "@tauri-apps/api/fs";
 import { create } from "zustand";
 interface AppState {
@@ -9,6 +9,7 @@ interface AppState {
   files: FileInfo[];
   currFile?: FileInfo;
   sortInfo?: SortInfo;
+  settings: Settings;
 
   setCurrFile: (name?: FileInfo) => void;
   setProjects: (projects: Projects) => void;
@@ -16,12 +17,16 @@ interface AppState {
   setFiles: (files: FileInfo[]) => void;
   fetchDir: () => Promise<void>;
   setSortInfo: (sortInfo: SortInfo) => Promise<void>;
+  setSettings: (settings: Settings) => void;
 }
 const useStore = create<AppState>()((set, get) => ({
   currProject: undefined,
   projects: {},
   files: [],
   currFile: undefined,
+  settings: localStorage.getItem("settings")
+    ? JSON.parse(localStorage.getItem("settings")!)
+    : { showTOC: true },
 
   setCurrFile: (currFile) => set(() => ({ currFile })),
   setCurrProject: async (project) => {
@@ -69,6 +74,10 @@ const useStore = create<AppState>()((set, get) => ({
     const files: FileInfo[] = [];
     await processEntries(entries, files);
     set(() => ({ files }));
+  },
+  setSettings: (settings) => {
+    localStorage.setItem("settings", JSON.stringify(settings));
+    set(() => ({ settings }));
   },
 }));
 

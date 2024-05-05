@@ -28,7 +28,7 @@ pub fn os_default(#[allow(unused)] app_name: &str) -> Menu {
     file_menu = file_menu.add_native_item(MenuItem::CloseWindow);
     #[cfg(not(target_os = "macos"))]
     {
-        file_menu = file_menu.add_native_item(MenuItem::Quit);
+        file_menu = file_menu.add_item(settings).add_native_item(MenuItem::Quit);
     }
     menu = menu.add_submenu(Submenu::new("File", file_menu));
 

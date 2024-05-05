@@ -5,6 +5,7 @@ use std::fs::metadata;
 use std::time::SystemTime;
 use tauri::{Manager, Window};
 use tauri_plugin_context_menu;
+mod menu;
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct FileMeta {
@@ -63,6 +64,7 @@ fn get_file_metadata(filepath: String) -> FileMeta {
 }
 
 fn main() {
+    let context = tauri::generate_context!();
     tauri::Builder::default()
         .setup(|app| {
             #[cfg(target_os = "macos")]
@@ -75,6 +77,7 @@ fn main() {
         .plugin(tauri_plugin_store::Builder::default().build())
         .plugin(tauri_plugin_context_menu::init())
         .invoke_handler(tauri::generate_handler![get_file_metadata])
-        .run(tauri::generate_context!())
+        .menu(menu::os_default(&context.package_info().name))
+        .run(context)
         .expect("error while running tauri application");
 }

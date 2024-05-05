@@ -12,10 +12,10 @@ import { lazy } from "react";
 import { Toaster } from "./components/ui/toaster.tsx";
 import restoreState from "./store/restoreState.ts";
 import { ThemeProvider } from "./ThemeProvider.tsx";
+import AppSettings from "./components/Settings/AppSettings.tsx";
 const Project = lazy(() => import("./Project.tsx"));
 
 restoreState();
-
 const router = createBrowserRouter([
   {
     path: "/",
@@ -45,6 +45,7 @@ const router = createBrowserRouter([
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+      <AppSettings />
       <Toaster />
       <RouterProvider router={router} />
     </ThemeProvider>

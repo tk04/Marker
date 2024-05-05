@@ -42,7 +42,8 @@
         "all": false,
         "maximize": true,
         "unmaximize": true,
-        "startDragging": true
+        "startDragging": true,
+        "create": true
       }
     },
     "bundle": {
@@ -100,8 +101,7 @@
         "titleBarStyle": "Transparent",
         "width": 800,
         "minWidth": 800,
-        "minHeight": 400,
-        "theme": "Light"
+        "minHeight": 400
       }
     ]
   }

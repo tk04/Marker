@@ -29,8 +29,7 @@ export function ThemeProvider({
   const [theme, setTheme] = useState<Theme>(
     () => (localStorage.getItem(storageKey) as Theme) || defaultTheme,
   );
-
-  useEffect(() => {
+  function changeTheme() {
     const root = window.document.documentElement;
 
     root.classList.remove("light", "dark");
@@ -46,6 +45,20 @@ export function ThemeProvider({
     }
 
     root.classList.add(theme);
+  }
+
+  useEffect(() => {
+    changeTheme();
+
+    window
+      .matchMedia("(prefers-color-scheme: dark)")
+      .addEventListener("change", changeTheme);
+
+    return () => {
+      window
+        .matchMedia("(prefers-color-scheme: dark)")
+        .removeEventListener("change", changeTheme);
+    };
   }, [theme]);
 
   const value = {

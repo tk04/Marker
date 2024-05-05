@@ -236,11 +236,11 @@ p,
 .ProseMirror p {
   font-size: 18px;
   line-height: 1.8rem;
-  /* color: #404040; */
   @apply text-primary;
 }
 .ProseMirror blockquote {
-  border-left: 3px solid rgba(13, 13, 13, 0.1);
+  @apply border-l-[3px];
+  @apply border-muted-foreground;
   padding-left: 1rem;
 }
 .ProseMirror strong {

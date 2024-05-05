@@ -1,7 +1,7 @@
 use tauri::{AboutMetadata, CustomMenuItem, Menu, MenuItem, Submenu};
 pub fn os_default(#[allow(unused)] app_name: &str) -> Menu {
     let mut menu = Menu::new();
-    let settings = CustomMenuItem::new("settings", "Settings").accelerator("CMD+,");
+    let settings = CustomMenuItem::new("settings", "Settings").accelerator("CmdOrCtrl+,");
     #[cfg(target_os = "macos")]
     {
         menu = menu.add_submenu(Submenu::new(

@@ -115,9 +115,7 @@ const Publish: React.FC<props> = ({ filePath, projectPath, reRender }) => {
   return (
     <div>
       <Dialog open={open} onOpenChange={(e) => setOpen(e)}>
-        <DialogTrigger className="text-sm text-neutral-700">
-          Publish
-        </DialogTrigger>
+        <DialogTrigger className="text-sm">Publish</DialogTrigger>
         <DialogContent className="sm:rounded-sm max-w-[700px]">
           <DialogHeader>
             <DialogTitle>Commit Changes</DialogTitle>

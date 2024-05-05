@@ -16,7 +16,6 @@ import { markdownToHtml, htmlToMarkdown } from "@/utils/markdown";
 import { Node } from "@tiptap/pm/model";
 import TableOfContents from "./TableOfContents";
 import { Editor as EditorType } from "@tiptap/core";
-import { ModeToggle } from "../Settings/Theme";
 
 export type TOC = { node: Node; level: number }[];
 interface props {
@@ -115,7 +114,7 @@ const Editor: React.FC<props> = ({
   if (!editor) return;
 
   return (
-    <div className="h-screen flex flex-col dark:bg-zinc-900">
+    <div className="h-screen flex flex-col dark:bg-neutral-900">
       <Menu editor={editor} />
       <LinkPopover editor={editor} />
 
@@ -140,7 +139,6 @@ const Editor: React.FC<props> = ({
           />
         </div>
       </div>
-      <ModeToggle />
 
       <div className="border-l h-screen fixed right-0 pt-[170px] hidden xl:block overflow-hidden hover:overflow-y-auto z-0 hover:z-10">
         <TableOfContents toc={toc} />

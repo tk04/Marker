@@ -12,6 +12,8 @@ import useStore from "@/store/appStore";
 import { FileEntry } from "@tauri-apps/api/fs";
 import { useState, useEffect, memo, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import { useTheme } from "@/ThemeProvider";
+import { Moon, Sun, SunMoon } from "lucide-react";
 
 const Files = ({
   files,
@@ -48,6 +50,7 @@ const Files = ({
 };
 
 const CommandMenu: React.FC = () => {
+  const { setTheme } = useTheme();
   const navigate = useNavigate();
   const elementRef = useRef<HTMLDivElement>(null);
   const [open, setOpen] = useState(false);
@@ -105,6 +108,39 @@ const CommandMenu: React.FC = () => {
               <p>{p[1].name}</p>
             </CommandItem>
           ))}
+        </CommandGroup>
+        <CommandGroup heading="Theme">
+          <CommandItem
+            className="space-x-1"
+            onSelect={() => {
+              setTheme("light");
+              close();
+            }}
+          >
+            <Sun />
+            <p>Light Theme</p>
+          </CommandItem>
+          <CommandItem
+            className="space-x-1"
+            onSelect={() => {
+              setTheme("dark");
+              close();
+            }}
+          >
+            <Moon />
+            <p>Dark Theme</p>
+          </CommandItem>
+
+          <CommandItem
+            className="space-x-1"
+            onSelect={() => {
+              setTheme("system");
+              close();
+            }}
+          >
+            <SunMoon />
+            <p>System Theme</p>
+          </CommandItem>
         </CommandGroup>
       </CommandList>
     </CommandDialog>

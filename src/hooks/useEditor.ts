@@ -21,13 +21,22 @@ import { RichTextLink } from "@/components/Editor/extensions/link-text";
 import TableView from "@/components/Editor/NodeViews/TableView";
 import { DeleteCells } from "@/lib/tableShortcut";
 import TableOfContents from "@/components/Editor/extensions/table-of-contents";
+import FileHandler from "@/components/Editor/extensions/file-handler";
+import Metadata from "@/components/Editor/extensions/metadata";
 
 interface props {
   content: string;
   onUpdate: () => void;
   folderPath: string;
+  projectDir: string;
+  assetsDir?: string;
 }
-const useTextEditor = ({ content, onUpdate, folderPath }: props) => {
+const useTextEditor = ({
+  content,
+  onUpdate,
+  folderPath,
+  projectDir,
+}: props) => {
   const editor = useEditor({
     editorProps: {
       attributes: {
@@ -36,6 +45,12 @@ const useTextEditor = ({ content, onUpdate, folderPath }: props) => {
       },
     },
     extensions: [
+      Metadata.configure({
+        filePath: folderPath,
+        assetsFolder: "assets",
+        projectDir,
+      }),
+      FileHandler,
       Table.extend({
         addNodeView() {
           return ReactNodeViewRenderer(TableView, {

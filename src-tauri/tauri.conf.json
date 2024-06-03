@@ -101,7 +101,8 @@
         "titleBarStyle": "Transparent",
         "width": 800,
         "minWidth": 800,
-        "minHeight": 400
+        "minHeight": 400,
+        "fileDropEnabled": false
       }
     ]
   }

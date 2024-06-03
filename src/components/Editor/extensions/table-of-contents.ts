@@ -2,7 +2,6 @@ import { Extension } from "@tiptap/core";
 import { Node } from "@tiptap/pm/model";
 import { Transaction } from "@tiptap/pm/state";
 import { ReplaceAroundStep, ReplaceStep } from "@tiptap/pm/transform";
-import { Editor } from "@tiptap/react";
 
 import { v4 as uuidv4 } from "uuid";
 
@@ -46,14 +45,7 @@ const TableOfContents = Extension.create({
     };
   },
 
-  //@ts-ignore
-  onTransaction({
-    transaction: tr,
-    editor,
-  }: {
-    transaction: Transaction;
-    editor: Editor;
-  }) {
+  onTransaction({ transaction: tr }: { transaction: Transaction }) {
     if (!tr.docChanged || tr.getMeta("tocUpdated")) return;
 
     let runUpdate = false;
@@ -83,62 +75,66 @@ const TableOfContents = Extension.create({
     }
 
     if (runUpdate) {
-      editor.commands.updateTOC();
+      this.editor.commands.updateTOC();
     }
+  },
+
+  onCreate() {
+    this.editor.commands.updateTOC();
   },
 
   addCommands() {
     return {
       updateTOC:
         () =>
-          ({ tr }) => {
-            const toc: TOC = [];
-            let prevLevel: number | null = null;
+        ({ tr }) => {
+          const toc: TOC = [];
+          let prevLevel: number | null = null;
 
-            tr.setMeta("tocUpdated", true);
-            tr.setMeta("addToHistory", false);
+          tr.setMeta("tocUpdated", true);
+          tr.setMeta("addToHistory", false);
 
-            tr.doc.descendants((node, pos) => {
-              if (node.type.name != "heading") return;
-              let nodeId = node.attrs.id;
+          tr.doc.descendants((node, pos) => {
+            if (node.type.name != "heading") return;
+            let nodeId = node.attrs.id;
 
-              if (!nodeId) {
-                nodeId = uuidv4();
-                tr.setNodeAttribute(pos, "id", nodeId);
-              }
+            if (!nodeId) {
+              nodeId = uuidv4();
+              tr.setNodeAttribute(pos, "id", nodeId);
+            }
 
-              let currLvl;
-              if (prevLevel != null) {
-                let lastVal = toc[toc.length - 1].level;
-                currLvl =
-                  node.attrs.level < prevLevel
-                    ? node.attrs.level
-                    : node.attrs.level == prevLevel
-                      ? lastVal
-                      : lastVal + 1;
-              } else {
-                currLvl = 1;
-              }
-              prevLevel = node.attrs.level;
+            let currLvl;
+            if (prevLevel != null) {
+              let lastVal = toc[toc.length - 1].level;
+              currLvl =
+                node.attrs.level < prevLevel
+                  ? node.attrs.level
+                  : node.attrs.level == prevLevel
+                    ? lastVal
+                    : lastVal + 1;
+            } else {
+              currLvl = 1;
+            }
+            prevLevel = node.attrs.level;
 
-              let headingNode =
-                node.attrs.id != nodeId
-                  ? node.type.create(
+            let headingNode =
+              node.attrs.id != nodeId
+                ? node.type.create(
                     { ...node.attrs, id: nodeId },
                     node.content,
                     node.marks,
                   )
-                  : node;
+                : node;
 
-              toc.push({
-                level: currLvl,
-                node: headingNode,
-              });
+            toc.push({
+              level: currLvl,
+              node: headingNode,
             });
+          });
 
-            this.storage.toc = toc;
-            return true;
-          },
+          this.storage.toc = toc;
+          return true;
+        },
     };
   },
 });

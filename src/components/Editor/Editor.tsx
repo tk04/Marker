@@ -41,6 +41,7 @@ const Editor: React.FC<props> = ({
     content,
     onUpdate,
     folderPath: file.path,
+    projectDir: projectPath,
   });
 
   function onUpdate() {
@@ -64,7 +65,7 @@ const Editor: React.FC<props> = ({
         clearTimeout(timeout);
       };
     }
-  }, [updateContent]);
+  }, [updateContent, content]);
 
   useEffect(() => {
     if (!editor) return;

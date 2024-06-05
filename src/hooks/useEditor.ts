@@ -24,6 +24,9 @@ import TableOfContents from "@/components/Editor/extensions/table-of-contents";
 import FileHandler from "@/components/Editor/extensions/file-handler";
 import Metadata from "@/components/Editor/extensions/metadata";
 
+import TaskItem from "@tiptap/extension-task-item";
+import TaskList from "@tiptap/extension-task-list";
+
 interface props {
   content: string;
   onUpdate: () => void;
@@ -51,6 +54,8 @@ const useTextEditor = ({
         projectDir,
       }),
       FileHandler,
+      TaskList,
+      TaskItem.configure({ nested: true }),
       Table.extend({
         addNodeView() {
           return ReactNodeViewRenderer(TableView, {

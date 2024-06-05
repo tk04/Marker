@@ -37,6 +37,8 @@
     "@tiptap/extension-table-cell": "^2.4.0",
     "@tiptap/extension-table-header": "^2.4.0",
     "@tiptap/extension-table-row": "^2.4.0",
+    "@tiptap/extension-task-item": "^2.4.0",
+    "@tiptap/extension-task-list": "^2.4.0",
     "@tiptap/pm": "^2.4.0",
     "@tiptap/react": "^2.4.0",
     "@tiptap/starter-kit": "^2.4.0",

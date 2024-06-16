@@ -149,7 +149,7 @@ const Editor: React.FC<props> = ({ projectPath, file, collapse }) => {
 
             <EditorContent
               editor={editor}
-              className="pb-44 px-2 md:px-0 grow h-full"
+              className="pb-10 px-2 md:px-0 grow h-full"
             />
           </div>
         </div>

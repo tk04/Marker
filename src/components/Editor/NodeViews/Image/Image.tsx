@@ -32,8 +32,7 @@ const ImageView: React.FC<props> = ({
   const [isImg, setIsImage] = useState(true);
   async function updateAssetSrc() {
     const src = await getImgUrl(
-      //@ts-ignore - folderPath will always be set
-      editor.options.editorProps.attributes.folderPath,
+      editor.storage.metadata.filePath,
       node.attrs.src,
     );
     setSrc(src);

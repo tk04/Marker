@@ -21,7 +21,6 @@ import { RichTextLink } from "@/components/Editor/extensions/link-text";
 import TableView from "@/components/Editor/NodeViews/TableView";
 import { DeleteCells } from "@/lib/tableShortcut";
 import TableOfContents from "@/components/Editor/extensions/table-of-contents";
-import FileHandler from "@/components/Editor/extensions/file-handler";
 import Metadata from "@/components/Editor/extensions/metadata";
 
 import TaskItem from "@tiptap/extension-task-item";
@@ -30,30 +29,23 @@ import TaskList from "@tiptap/extension-task-list";
 interface props {
   content: string;
   onUpdate: () => void;
-  folderPath: string;
+  filePath: string;
   projectDir: string;
   assetsDir?: string;
 }
-const useTextEditor = ({
-  content,
-  onUpdate,
-  folderPath,
-  projectDir,
-}: props) => {
+const useTextEditor = ({ content, onUpdate, filePath, projectDir }: props) => {
   const editor = useEditor({
     editorProps: {
       attributes: {
         class: `prose h-full`,
-        folderPath,
       },
     },
     extensions: [
       Metadata.configure({
-        filePath: folderPath,
+        filePath: filePath,
         assetsFolder: "assets",
         projectDir,
       }),
-      FileHandler,
       TaskList,
       TaskItem.configure({ nested: true }),
       Table.extend({
@@ -106,14 +98,6 @@ const useTextEditor = ({
       Image.extend({
         addNodeView() {
           return ReactNodeViewRenderer(ImageView);
-        },
-        addAttributes() {
-          return {
-            ...this.parent?.(),
-            folderPath: {
-              default: folderPath,
-            },
-          };
         },
         addInputRules() {
           return [

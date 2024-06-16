@@ -29,7 +29,7 @@ const Editor: React.FC<props> = ({ projectPath, file, collapse }) => {
   const editor = useTextEditor({
     content: "",
     onUpdate,
-    folderPath: file.path,
+    filePath: file.path,
     projectDir: projectPath,
   });
 
@@ -61,6 +61,7 @@ const Editor: React.FC<props> = ({ projectPath, file, collapse }) => {
   }, [metadata]);
 
   async function loadFile() {
+    if (!editor) return;
     let data = await readTextFile(file.path);
     const linesIdx = data.indexOf("---", 2);
     // parse YAML header
@@ -75,21 +76,17 @@ const Editor: React.FC<props> = ({ projectPath, file, collapse }) => {
     // parse markdown content
     const parsedHTML = await markdownToHtml(data);
 
-    editor?.commands.setContent(parsedHTML);
-    editor?.setOptions({
-      editorProps: {
-        attributes: {
-          folderPath: file.path,
-        },
-      },
+    editor.commands.updateMetadata({
+      filePath: file.path,
     });
+    editor.commands.setContent(parsedHTML);
 
-    editor?.commands.focus("start");
+    editor.commands.focus("start");
     document.querySelector(".editor")?.scroll({ top: 0 });
 
     // reset history (see https://github.com/ueberdosis/tiptap/issues/491#issuecomment-1261056162)
     // @ts-ignore
-    if (editor?.state.history$) {
+    if (editor.state.history$) {
       // @ts-ignore
       editor.state.history$.prevRanges = null;
       // @ts-ignore
@@ -115,9 +112,8 @@ const Editor: React.FC<props> = ({ projectPath, file, collapse }) => {
         {editor.storage.characterCount.words()} words
       </p>
       <div
-        className={`duration-75 transition-all h-fit pb-2 flex items-center justify-between px-5 z-20 pt-[7px] ${
-          collapse ? (isMacOS() ? "ml-[130px]" : "ml-[55px]") : "ml-[210px]"
-        }`}
+        className={`duration-75 transition-all h-fit pb-2 flex items-center justify-between px-5 z-20 pt-[7px] ${collapse ? (isMacOS() ? "ml-[130px]" : "ml-[55px]") : "ml-[210px]"
+          }`}
       >
         <div className="flex items-center gap-5">
           <div className="flex items-center gap-2 text-neutral-400 text-sm">
@@ -139,9 +135,8 @@ const Editor: React.FC<props> = ({ projectPath, file, collapse }) => {
         </div>
       )}
       <div
-        className={`editor transition-all duration-50 h-full overflow-auto ${
-          !collapse ? "ml-[200px] px-5 lg:px-0 lg:ml-0" : "ml-0"
-        } transition-all duration-75`}
+        className={`editor transition-all duration-50 h-full overflow-auto ${!collapse ? "ml-[200px] px-5 lg:px-0 lg:ml-0" : "ml-0"
+          } transition-all duration-75`}
       >
         <div className={`flex flex-col pt-20 h-full`}>
           <div className="text-editor grow justify-center flex flex-col max-w-[580px] lg:pl-20 xl:pl-0 lg:max-w-[736px] m-auto w-full">

@@ -16,6 +16,7 @@ import { markdownToHtml, htmlToMarkdown } from "@/utils/markdown";
 import { Node } from "@tiptap/pm/model";
 import TableOfContents from "./TableOfContents";
 import useStore from "@/store/appStore";
+import type { Editor as EditorType } from "@tiptap/core";
 
 export type TOC = { node: Node; level: number }[];
 interface props {
@@ -31,6 +32,7 @@ const Editor: React.FC<props> = ({ projectPath, file, collapse }) => {
     onUpdate,
     filePath: file.path,
     projectDir: projectPath,
+    loadFile: loadFile,
   });
 
   const saveFileTimeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -60,7 +62,7 @@ const Editor: React.FC<props> = ({ projectPath, file, collapse }) => {
     onUpdate();
   }, [metadata]);
 
-  async function loadFile() {
+  async function loadFile(editor: EditorType | null) {
     if (!editor) return;
     let data = await readTextFile(file.path);
     const linesIdx = data.indexOf("---", 2);
@@ -95,7 +97,7 @@ const Editor: React.FC<props> = ({ projectPath, file, collapse }) => {
   }
   useEffect(() => {
     clearSaveFileTimeout();
-    let timeout = setTimeout(loadFile, 0);
+    let timeout = setTimeout(loadFile.bind(null, editor), 0);
     return () => {
       clearTimeout(timeout);
     };

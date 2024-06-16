@@ -25,15 +25,23 @@ import Metadata from "@/components/Editor/extensions/metadata";
 
 import TaskItem from "@tiptap/extension-task-item";
 import TaskList from "@tiptap/extension-task-list";
+import { Editor } from "@tiptap/core";
 
 interface props {
   content: string;
   onUpdate: () => void;
+  loadFile: (editor: Editor) => void;
   filePath: string;
   projectDir: string;
   assetsDir?: string;
 }
-const useTextEditor = ({ content, onUpdate, filePath, projectDir }: props) => {
+const useTextEditor = ({
+  content,
+  onUpdate,
+  loadFile,
+  filePath,
+  projectDir,
+}: props) => {
   const editor = useEditor({
     editorProps: {
       attributes: {
@@ -162,6 +170,9 @@ const useTextEditor = ({ content, onUpdate, filePath, projectDir }: props) => {
     ],
     content,
     onUpdate,
+    onCreate: ({ editor }) => {
+      loadFile(editor);
+    },
   });
 
   return editor;

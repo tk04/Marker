@@ -7,7 +7,7 @@ import {
 } from "@tauri-apps/api/fs";
 import { EditorContent, isMacOS } from "@tiptap/react";
 import Titles from "./Titles";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Menu from "./Menu";
 import LinkPopover from "./Popover/Link";
 import useTextEditor from "@/hooks/useEditor.ts";
@@ -36,7 +36,6 @@ const Editor: React.FC<props> = ({
 }) => {
   const settings = useStore((s) => s.settings);
   const [metadata, setMetadata] = useState(fileMetadata);
-  const [updateContent, setUpdateContent] = useState(0);
   const editor = useTextEditor({
     content,
     onUpdate,
@@ -44,9 +43,18 @@ const Editor: React.FC<props> = ({
     projectDir: projectPath,
   });
 
-  function onUpdate() {
-    setUpdateContent((p) => p + 1);
+  const saveFileTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  function clearSaveFileTimeout() {
+    if (saveFileTimeoutRef.current != null) {
+      clearTimeout(saveFileTimeoutRef.current);
+    }
   }
+
+  function onUpdate() {
+    clearSaveFileTimeout();
+    saveFileTimeoutRef.current = setTimeout(saveFile, 200);
+  }
+
   async function saveFile() {
     try {
       let mdContent = "---\n" + yaml.stringify(metadata) + "---\n";
@@ -59,17 +67,12 @@ const Editor: React.FC<props> = ({
     }
   }
   useEffect(() => {
-    if (updateContent) {
-      const timeout = setTimeout(saveFile, 200);
-      return () => {
-        clearTimeout(timeout);
-      };
-    }
-  }, [updateContent, content]);
+    onUpdate();
+  }, [metadata]);
 
   useEffect(() => {
     if (!editor) return;
-    setUpdateContent(0);
+    clearSaveFileTimeout();
     editor?.commands.setContent(content);
     editor?.setOptions({
       editorProps: {
@@ -82,7 +85,7 @@ const Editor: React.FC<props> = ({
     setMetadata(fileMetadata);
     editor?.commands.focus("start");
     document.querySelector(".editor")?.scroll({ top: 0 });
-  }, [content]);
+  }, [content, fileMetadata]);
 
   if (!editor) return;
 
@@ -95,8 +98,9 @@ const Editor: React.FC<props> = ({
         {editor.storage.characterCount.words()} words
       </p>
       <div
-        className={`duration-75 transition-all h-fit pb-2 flex items-center justify-between px-5 z-20 pt-[7px] ${collapse ? (isMacOS() ? "ml-[130px]" : "ml-[55px]") : "ml-[210px]"
-          }`}
+        className={`duration-75 transition-all h-fit pb-2 flex items-center justify-between px-5 z-20 pt-[7px] ${
+          collapse ? (isMacOS() ? "ml-[130px]" : "ml-[55px]") : "ml-[210px]"
+        }`}
       >
         <div className="flex items-center gap-5">
           <div className="flex items-center gap-2 text-neutral-400 text-sm">
@@ -118,16 +122,13 @@ const Editor: React.FC<props> = ({
         </div>
       )}
       <div
-        className={`editor transition-all duration-50 h-full overflow-auto ${!collapse ? "ml-[200px] px-5 lg:px-0 lg:ml-0" : "ml-0"
-          } transition-all duration-75`}
+        className={`editor transition-all duration-50 h-full overflow-auto ${
+          !collapse ? "ml-[200px] px-5 lg:px-0 lg:ml-0" : "ml-0"
+        } transition-all duration-75`}
       >
         <div className={`flex flex-col pt-20 h-full`}>
           <div className="text-editor grow justify-center flex flex-col max-w-[580px] lg:pl-20 xl:pl-0 lg:max-w-[736px] m-auto w-full">
-            <Titles
-              metadata={metadata}
-              setMetadata={setMetadata}
-              onUpdate={onUpdate}
-            />
+            <Titles metadata={metadata} setMetadata={setMetadata} />
 
             <EditorContent
               editor={editor}

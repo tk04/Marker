@@ -11,7 +11,7 @@ declare module "@tiptap/core" {
   interface Commands<ReturnType> {
     metadata: {
       /**
-       * Comments will be added to the autocomplete.
+       * update file metadata
        */
       updateMetadata: (data: Partial<MetadataType>) => ReturnType;
     };

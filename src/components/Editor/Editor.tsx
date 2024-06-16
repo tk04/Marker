@@ -20,24 +20,14 @@ import useStore from "@/store/appStore";
 export type TOC = { node: Node; level: number }[];
 interface props {
   file: FileEntry;
-  content: string;
-  fileMetadata: { [key: string]: any };
   projectPath: string;
   collapse: boolean;
-  reRender: () => void;
 }
-const Editor: React.FC<props> = ({
-  projectPath,
-  reRender,
-  file,
-  content,
-  fileMetadata,
-  collapse,
-}) => {
+const Editor: React.FC<props> = ({ projectPath, file, collapse }) => {
   const settings = useStore((s) => s.settings);
-  const [metadata, setMetadata] = useState(fileMetadata);
+  const [metadata, setMetadata] = useState<{ [key: string]: any }>({});
   const editor = useTextEditor({
-    content,
+    content: "",
     onUpdate,
     folderPath: file.path,
     projectDir: projectPath,
@@ -70,10 +60,20 @@ const Editor: React.FC<props> = ({
     onUpdate();
   }, [metadata]);
 
-  useEffect(() => {
-    if (!editor) return;
-    clearSaveFileTimeout();
-    editor?.commands.setContent(content);
+  async function loadFile() {
+    let data = await readTextFile(file.path);
+    const linesIdx = data.indexOf("---", 2);
+    if (data.startsWith("---") && linesIdx != -1) {
+      const metadataText = data.slice(3, linesIdx);
+      const parsed = yaml.parse(metadataText);
+      setMetadata(parsed);
+      data = data.slice(data.indexOf("---", 2) + 4);
+    } else {
+      setMetadata({});
+    }
+    const parsedHTML = await markdownToHtml(data);
+
+    editor?.commands.setContent(parsedHTML);
     editor?.setOptions({
       editorProps: {
         attributes: {
@@ -82,10 +82,13 @@ const Editor: React.FC<props> = ({
       },
     });
 
-    setMetadata(fileMetadata);
     editor?.commands.focus("start");
     document.querySelector(".editor")?.scroll({ top: 0 });
-  }, [content, fileMetadata]);
+  }
+  useEffect(() => {
+    clearSaveFileTimeout();
+    loadFile();
+  }, [file.path]);
 
   if (!editor) return;
 
@@ -112,7 +115,7 @@ const Editor: React.FC<props> = ({
           <Publish
             projectPath={projectPath}
             filePath={file.path}
-            reRender={reRender}
+            reRender={loadFile}
           />
         </div>
       </div>
@@ -141,45 +144,4 @@ const Editor: React.FC<props> = ({
   );
 };
 
-const MainEditor = ({
-  file,
-  projectPath,
-  collapse,
-}: {
-  file: FileEntry;
-  projectPath: string;
-  collapse: boolean;
-}) => {
-  const [content, setContent] = useState<string>("");
-  const [metadata, setMetadata] = useState<{ [key: string]: any }>({});
-
-  async function getContent() {
-    setContent("");
-    let data = await readTextFile(file.path);
-    const linesIdx = data.indexOf("---", 2);
-    if (data.startsWith("---") && linesIdx != -1) {
-      const metadataText = data.slice(3, linesIdx);
-      const parsed = yaml.parse(metadataText);
-      setMetadata(parsed);
-      data = data.slice(data.indexOf("---", 2) + 4);
-    } else {
-      setMetadata({});
-    }
-    const parsedHTML = await markdownToHtml(data);
-    setContent(parsedHTML);
-  }
-  useEffect(() => {
-    getContent();
-  }, [file.path]);
-  return (
-    <Editor
-      projectPath={projectPath}
-      reRender={async () => await getContent()}
-      file={file}
-      content={content}
-      fileMetadata={metadata}
-      collapse={collapse}
-    />
-  );
-};
-export default MainEditor;
+export default Editor;

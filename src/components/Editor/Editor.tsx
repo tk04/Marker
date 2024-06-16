@@ -127,7 +127,7 @@ const Editor: React.FC<props> = ({ projectPath, file, collapse }) => {
           <Publish
             projectPath={projectPath}
             filePath={file.path}
-            reRender={loadFile}
+            reRender={() => loadFile(editor)}
           />
         </div>
       </div>

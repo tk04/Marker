@@ -63,6 +63,7 @@ const Editor: React.FC<props> = ({ projectPath, file, collapse }) => {
   async function loadFile() {
     let data = await readTextFile(file.path);
     const linesIdx = data.indexOf("---", 2);
+    // parse YAML header
     if (data.startsWith("---") && linesIdx != -1) {
       const metadataText = data.slice(3, linesIdx);
       const parsed = yaml.parse(metadataText);
@@ -71,6 +72,7 @@ const Editor: React.FC<props> = ({ projectPath, file, collapse }) => {
     } else {
       setMetadata({});
     }
+    // parse markdown content
     const parsedHTML = await markdownToHtml(data);
 
     editor?.commands.setContent(parsedHTML);
@@ -84,10 +86,22 @@ const Editor: React.FC<props> = ({ projectPath, file, collapse }) => {
 
     editor?.commands.focus("start");
     document.querySelector(".editor")?.scroll({ top: 0 });
+
+    // reset history (see https://github.com/ueberdosis/tiptap/issues/491#issuecomment-1261056162)
+    // @ts-ignore
+    if (editor?.state.history$) {
+      // @ts-ignore
+      editor.state.history$.prevRanges = null;
+      // @ts-ignore
+      editor.state.history$.done.eventCount = 0;
+    }
   }
   useEffect(() => {
     clearSaveFileTimeout();
-    loadFile();
+    let timeout = setTimeout(loadFile, 0);
+    return () => {
+      clearTimeout(timeout);
+    };
   }, [file.path]);
 
   if (!editor) return;

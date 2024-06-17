@@ -1,12 +1,6 @@
 import CharacterCount from "@tiptap/extension-character-count";
 import BubbleMenu from "@tiptap/extension-bubble-menu";
-
-import { v4 as uuidv4 } from "uuid";
-import {
-  useEditor,
-  ReactNodeViewRenderer,
-  textblockTypeInputRule,
-} from "@tiptap/react";
+import { useEditor, ReactNodeViewRenderer } from "@tiptap/react";
 import Image from "@tiptap/extension-image";
 import Heading from "@tiptap/extension-heading";
 import BulletList from "@tiptap/extension-bullet-list";
@@ -26,21 +20,42 @@ import CodeBlockLowlight from "@/components/Editor/extensions/CodeBlockLowlight"
 import { RichTextLink } from "@/components/Editor/extensions/link-text";
 import TableView from "@/components/Editor/NodeViews/TableView";
 import { DeleteCells } from "@/lib/tableShortcut";
+import TableOfContents from "@/components/Editor/extensions/table-of-contents";
+import Metadata from "@/components/Editor/extensions/metadata";
+
+import TaskItem from "@tiptap/extension-task-item";
+import TaskList from "@tiptap/extension-task-list";
+import { Editor } from "@tiptap/core";
 
 interface props {
   content: string;
   onUpdate: () => void;
-  folderPath: string;
+  loadFile: (editor: Editor) => void;
+  filePath: string;
+  projectDir: string;
+  assetsDir?: string;
 }
-const useTextEditor = ({ content, onUpdate, folderPath }: props) => {
+const useTextEditor = ({
+  content,
+  onUpdate,
+  loadFile,
+  filePath,
+  projectDir,
+}: props) => {
   const editor = useEditor({
     editorProps: {
       attributes: {
         class: `prose h-full`,
-        folderPath,
       },
     },
     extensions: [
+      Metadata.configure({
+        filePath: filePath,
+        assetsFolder: "assets",
+        projectDir,
+      }),
+      TaskList,
+      TaskItem.configure({ nested: true }),
       Table.extend({
         addNodeView() {
           return ReactNodeViewRenderer(TableView, {
@@ -92,14 +107,6 @@ const useTextEditor = ({ content, onUpdate, folderPath }: props) => {
         addNodeView() {
           return ReactNodeViewRenderer(ImageView);
         },
-        addAttributes() {
-          return {
-            ...this.parent?.(),
-            folderPath: {
-              default: folderPath,
-            },
-          };
-        },
         addInputRules() {
           return [
             {
@@ -140,41 +147,8 @@ const useTextEditor = ({ content, onUpdate, folderPath }: props) => {
         },
       }),
       CodeBlockLowlight,
-      Heading.extend({
-        addAttributes() {
-          return {
-            ...this.parent?.(),
-            id: {
-              default: "",
-              parseHTML: () => uuidv4(),
-            },
-          };
-        },
-        addPasteRules() {
-          return this.options.levels.map((level: number) => {
-            return textblockTypeInputRule({
-              find: new RegExp(`^(#{1,${level}})\\s$`),
-              type: this.type,
-              getAttributes: () => ({
-                level,
-                id: uuidv4(),
-              }),
-            });
-          });
-        },
-        addInputRules() {
-          return this.options.levels.map((level: number) => {
-            return textblockTypeInputRule({
-              find: new RegExp(`^(#{1,${level}})\\s$`),
-              type: this.type,
-              getAttributes: () => ({
-                level,
-                id: uuidv4(),
-              }),
-            });
-          });
-        },
-      }),
+      TableOfContents,
+      Heading,
       StarterKit.configure({
         orderedList: false,
         bulletList: false,
@@ -196,6 +170,9 @@ const useTextEditor = ({ content, onUpdate, folderPath }: props) => {
     ],
     content,
     onUpdate,
+    onCreate: ({ editor }) => {
+      loadFile(editor);
+    },
   });
 
   return editor;

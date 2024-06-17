@@ -8,7 +8,7 @@
   },
   "package": {
     "productName": "Marker",
-    "version": "1.4.0"
+    "version": "1.4.1"
   },
   "tauri": {
     "allowlist": {
@@ -101,7 +101,8 @@
         "titleBarStyle": "Transparent",
         "width": 800,
         "minWidth": 800,
-        "minHeight": 400
+        "minHeight": 400,
+        "fileDropEnabled": false
       }
     ]
   }

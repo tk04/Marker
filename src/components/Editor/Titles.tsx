@@ -9,9 +9,8 @@ type Metadata = { [key: string]: any };
 interface props {
   metadata?: Metadata;
   setMetadata: Dispatch<SetStateAction<Metadata>>;
-  onUpdate: () => void;
 }
-const Titles: React.FC<props> = ({ metadata, setMetadata, onUpdate }) => {
+const Titles: React.FC<props> = ({ metadata, setMetadata }) => {
   const titleRef = useRef<HTMLTextAreaElement>(null);
   const subTitleRef = useRef<HTMLTextAreaElement>(null);
   function resizeInput() {
@@ -45,7 +44,6 @@ const Titles: React.FC<props> = ({ metadata, setMetadata, onUpdate }) => {
         value={metadata?.title || ""}
         onChange={(e) => {
           setMetadata((p) => ({ ...p, title: e.target.value }));
-          onUpdate();
         }}
       />
       <textarea
@@ -56,7 +54,6 @@ const Titles: React.FC<props> = ({ metadata, setMetadata, onUpdate }) => {
         value={metadata?.subtitle || ""}
         onChange={(e) => {
           setMetadata((p) => ({ ...p, subtitle: e.target.value }));
-          onUpdate();
         }}
       />
     </div>

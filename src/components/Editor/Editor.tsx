@@ -1,10 +1,6 @@
 import yaml from "yaml";
 
-import {
-  readTextFile,
-  writeTextFile,
-  type FileEntry,
-} from "@tauri-apps/api/fs";
+import { writeTextFile, type FileEntry } from "@tauri-apps/api/fs";
 import { EditorContent, isMacOS } from "@tiptap/react";
 import Titles from "./Titles";
 import { useEffect, useRef, useState } from "react";
@@ -12,7 +8,7 @@ import Menu from "./Menu";
 import LinkPopover from "./Popover/Link";
 import useTextEditor from "@/hooks/useEditor.ts";
 import Publish from "./Publish";
-import { markdownToHtml, htmlToMarkdown } from "@/utils/markdown";
+import { htmlToMarkdown, readMarkdownFile } from "@/utils/markdown";
 import { Node } from "@tiptap/pm/model";
 import TableOfContents from "./TableOfContents";
 import useStore from "@/store/appStore";
@@ -26,7 +22,7 @@ interface props {
 }
 const Editor: React.FC<props> = ({ projectPath, file, collapse }) => {
   const settings = useStore((s) => s.settings);
-  const [metadata, setMetadata] = useState<{ [key: string]: any }>({});
+  const [metadata, setMetadata] = useState<{ [key: string]: any } | null>(null);
   const editor = useTextEditor({
     content: "",
     onUpdate,
@@ -59,29 +55,20 @@ const Editor: React.FC<props> = ({ projectPath, file, collapse }) => {
     }
   }
   useEffect(() => {
-    onUpdate();
+    if (metadata != null) {
+      onUpdate();
+    }
   }, [metadata]);
 
   async function loadFile(editor: EditorType | null) {
     if (!editor) return;
-    let data = await readTextFile(file.path);
-    const linesIdx = data.indexOf("---", 2);
-    // parse YAML header
-    if (data.startsWith("---") && linesIdx != -1) {
-      const metadataText = data.slice(3, linesIdx);
-      const parsed = yaml.parse(metadataText);
-      setMetadata(parsed);
-      data = data.slice(data.indexOf("---", 2) + 4);
-    } else {
-      setMetadata({});
-    }
-    // parse markdown content
-    const parsedHTML = await markdownToHtml(data);
+    const { metadata, html } = await readMarkdownFile(file.path);
 
     editor.commands.updateMetadata({
       filePath: file.path,
     });
-    editor.commands.setContent(parsedHTML);
+    editor.commands.setContent(html);
+    setMetadata(metadata);
 
     editor.commands.focus("start");
     document.querySelector(".editor")?.scroll({ top: 0 });
@@ -142,7 +129,7 @@ const Editor: React.FC<props> = ({ projectPath, file, collapse }) => {
       >
         <div className={`flex flex-col pt-20 h-full`}>
           <div className="text-editor grow justify-center flex flex-col max-w-[580px] lg:pl-20 xl:pl-0 lg:max-w-[736px] m-auto w-full">
-            <Titles metadata={metadata} setMetadata={setMetadata} />
+            <Titles metadata={metadata ?? {}} setMetadata={setMetadata} />
 
             <EditorContent
               editor={editor}
